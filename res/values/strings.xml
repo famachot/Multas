@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MultasTransito</string>
+    <string name="title">Multas de Transito</string>
+    
+    
+    <!-- Strings para la activity Acerca de -->
+    <string name="pueblaAyto">Ayuntamiendo De Puebla</string>
+    <string name="versionApp">Multas de Transito Versión 1.0</string>
+    <string name="pueblaAytoEmpresa">2014-2018 </string>
+    <string name="pueblaAytoDerechos">Todos los derechos reservados</string>
+    <string name="menuAcercaDe">Acerca de...</string>
+    <string name="menuSalir">Salir</string>
+    
+    
+    
+    <!-- Strings para el menu principal -->
+    <string name="nom_user">Nombre de usuario</string>
+    <string name="email_user">email</string>
+    <string name="image_icon_menu">Menu</string>
+    <string name="textMenu">N/D</string>
+    <string name="drawer_open">Menu abierto</string>
+    <string name="drawer_close">Menu cerrado</string>
+     
+     <!-- Array del menu principal -->
+     <string-array name="menu_principal">
+         <item>Comida</item>
+         <item>Café</item>
+         <item>Para salir de noche</item>
+         <item>Sauld y bienestar</item>
+         <item>Tiendas</item>
+         <item>Cosas del trabajo</item>
+     </string-array>
+    
+    
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
