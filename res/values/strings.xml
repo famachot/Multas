@@ -22,7 +22,12 @@
     <string name="textMenu">N/D</string>
     <string name="drawer_open">Menu abierto</string>
     <string name="drawer_close">Menu cerrado</string>
-     
+    <string name="clear"></string> 
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="update">Update</string>
+    
+    
      <!-- Array del menu principal -->
      <string-array name="menu_principal">
          <item>Comida</item>

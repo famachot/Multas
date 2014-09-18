@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AyuntamientoActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/AyuntamientoActionBar</item>	    
+        
+    </style>
+    
+    <style name="AyuntamientoActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="titleTextStyle">@style/ayto.TitleTextStyle</item>
+        <item name="subtitleTextStyle">@style/ayto.SubTitleTextStyle</item>               
+        <item name="android:background">@color/azulAyuntamiento</item>                
+    </style>
+    
+    <style name="ayto.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorBlanco</item>
+        <item name="android:textStyle">normal</item>
+    </style>    
+
+    <style name="ayto.SubTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/colorBlanco</item>
+        <item name="android:textStyle">normal</item>
+    </style>            
+</resources>
