@@ -35,6 +35,9 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
 		add(itemModel);
 	}
 
+	
+	
+	
 	@Override
 	public int getViewTypeCount() {
 		return 2;
