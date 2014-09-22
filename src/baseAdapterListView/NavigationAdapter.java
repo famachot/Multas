@@ -158,7 +158,7 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
 			}			
 		}
 		
-		view.setBackgroundResource(R.drawable.seletor_item_navigation);		
+		view.setBackgroundResource(R.drawable.seletor_item_navigation); // Esta linea es muy importante, cambia los el color dependiendo del estado en el layout
 	    return view;		
 	}
 

@@ -1,18 +1,20 @@
 package com.puebla.ayto.ti.multas;
 
 import baseAdapterListView.NavigationAdapter;
-
 import br.liveo.utils.Constant;
+import br.liveo.utils.Menus;
 import navigationList.NavigationList;
 
 
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -46,8 +48,7 @@ public class MainActivity extends ActionBarActivity {
 		getSupportActionBar().setIcon(R.drawable.logo_ayuntamiento_original); //Se cambia el icono del Action Bar
 		setContentView(R.layout.content_app);
 		
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
+	
 		
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout); //Se obtiene una referencia de todo el drawer layout (Todo el contenedor)
@@ -68,9 +69,13 @@ public class MainActivity extends ActionBarActivity {
 		
 		mDrawerToggle = new ActionBarDrawerToggleCompat(this, mDrawerLayout);
 		
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    getSupportActionBar().setHomeButtonEnabled(true);
+		
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		
+		
 		
 		
 		if (savedInstanceState != null) { 			
@@ -110,6 +115,41 @@ public class MainActivity extends ActionBarActivity {
 
 	
 	
+	
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);	     
+		mDrawerToggle.syncState();	
+	 }
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);		
+	}
+	
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {  
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+              return true;
+        }		
+        
+		switch (item.getItemId()) {		
+		case Menus.HOME:
+			if (mDrawerLayout.isDrawerOpen(mLayoutMenu)) {
+				mDrawerLayout.closeDrawer(mLayoutMenu);
+			} else {
+				mDrawerLayout.openDrawer(mLayoutMenu);
+			}
+			return true;			
+		default:
+			return super.onOptionsItemSelected(item);			
+		}		             
+    }
 	public void setLastPosition(int posicao){		
 		this.lastPosition = posicao;
 	}
