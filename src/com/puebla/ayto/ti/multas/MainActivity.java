@@ -1,6 +1,11 @@
 package com.puebla.ayto.ti.multas;
 
+
+
+
+import fragments.LosMasComunes;
 import baseAdapterListView.NavigationAdapter;
+
 import br.liveo.utils.Constant;
 import br.liveo.utils.Menus;
 import navigationList.NavigationList;
@@ -8,12 +13,16 @@ import navigationList.NavigationList;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 
@@ -29,7 +39,7 @@ import android.widget.RelativeLayout;
 public class MainActivity extends ActionBarActivity {
 
 	private int counterItemDownloads;
-    private int lastPosition = 0;
+    private int lastPosition = 2;
 	
 	private DrawerLayout mDrawerLayout;
 	private LinearLayout mLayoutMenu;
@@ -88,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
 			
 	    }else{
 	    	setLastPosition(lastPosition); 
-	    	//setFragmentList(lastPosition);	    	
+	    	setFragmentList(lastPosition);	    	
 	    }
 		
 		
@@ -99,8 +109,8 @@ public class MainActivity extends ActionBarActivity {
 	 private class DrawerItemClickListener implements ListView.OnItemClickListener {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posicao, long id) {          	        	
-		    	//setLastPosition(posicao);        	
-		    	//setFragmentList(lastPosition);	    	
+		    	setLastPosition(posicao);        	
+		    	setFragmentList(lastPosition);	    	
 		    	mDrawerLayout.closeDrawer(mLayoutMenu);	    	
 	        }
 	    }
@@ -114,6 +124,14 @@ public class MainActivity extends ActionBarActivity {
 	};
 
 	
+	
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub		
+		super.onSaveInstanceState(outState);		
+		outState.putInt(Constant.LAST_POSITION, lastPosition);					
+	}
 	
 	
 	
@@ -131,18 +149,49 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	
+	
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mLayoutMenu);
+        menu.findItem(R.id.about).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		 MenuInflater inflater = getMenuInflater();
+	     inflater.inflate(R.menu.main, menu);
+	     return true;
+	}
+	
+	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {  
-
+		Intent mIntentAcerca;
+		//Menu mMenu = (Menu) findViewById(R.menu.main);
+		
+		//Log.d(TAG_VERIFICANDO_VOLCAN, "Antes de entrar al if ");
+		if (item.getItemId() == R.id.about) {
+			mIntentAcerca = new Intent(this,AcercaDe.class);
+			startActivity(mIntentAcerca);
+			
+		}
+		
         if (mDrawerToggle.onOptionsItemSelected(item)) {
               return true;
         }		
         
-		switch (item.getItemId()) {		
+		switch (item.getItemId()){	
 		case Menus.HOME:
 			if (mDrawerLayout.isDrawerOpen(mLayoutMenu)) {
 				mDrawerLayout.closeDrawer(mLayoutMenu);
+				//hideMenus(mMenu,2);
 			} else {
+				//hideMenus(mMenu,1);
 				mDrawerLayout.openDrawer(mLayoutMenu);
 			}
 			return true;			
@@ -150,6 +199,23 @@ public class MainActivity extends ActionBarActivity {
 			return super.onOptionsItemSelected(item);			
 		}		             
     }
+	
+    private void hideMenus(Menu menu, int posicao) {
+    	
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mLayoutMenu);    	
+    	
+        switch (posicao) {
+		case 1:        
+	        menu.findItem(Menus.ABOUT).setVisible(false);       
+			break;
+			
+		case 2:
+	        menu.findItem(Menus.ABOUT).setVisible(true);	        	        	              			
+			break;				
+			//implement other fragments here			
+		}          
+    }
+	
 	public void setLastPosition(int posicao){		
 		this.lastPosition = posicao;
 	}
@@ -157,6 +223,40 @@ public class MainActivity extends ActionBarActivity {
 	public int getCounterItemDownloads() {
 		return counterItemDownloads;
 	}
+	
+	
+	
+	/*** Revisión de todos los fragments ***/
+	
+private void setFragmentList(int position){
+		
+		FragmentManager fragmentManager = getSupportFragmentManager();							
+		
+		switch (position) {
+		case 0:			
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();
+			break;					
+		case 1:			
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();
+			break;			
+		case 2:			
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();						
+			break;				
+			
+		default:
+			Toast.makeText(getApplicationContext(), "implement other fragments here", Toast.LENGTH_SHORT).show();
+			break;	
+		}			
+	
+		if (position < 5){
+			navigationAdapter.resetarCheck();			
+			navigationAdapter.setChecked(position, true);
+		}
+	}
+	
+	
+	
+	
 	
 	
 	/*** Espacio para las clases que se utilizan dentro de esta activity  ****/

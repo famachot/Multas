@@ -85,7 +85,9 @@
 	        android:layout_width="match_parent"
 			android:layout_weight="4"
 	        android:layout_height="match_parent"
-			android:background="@drawable/fondo"/>
+			android:background="@drawable/fondo"
+			android:divider="@android:color/white"
+			android:dividerHeight=".5px"/>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
