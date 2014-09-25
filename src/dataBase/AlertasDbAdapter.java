@@ -132,7 +132,7 @@ public class AlertasDbAdapter {
 		mDataBaseHelper.close();
 	}
 	
-	public long CreateMulta(int id,int num_multa, String infraccion,int rangoInicial, int rangoFinal, String fundamento, String tipo,String frecuencia,String frecuente){
+	public long CreateMulta(int id,int num_multa, String infraccion,int rangoInicial, int rangoFinal, String fundamento, int tipo,int frecuencia,String frecuente){
 		long result = -1;
 		ContentValues mContentValues = new ContentValues();
 		mContentValues.put(EsquemaMultas.COLUMN_NAME_ID, id);
@@ -157,7 +157,7 @@ public class AlertasDbAdapter {
 	
 	
 	
-	public long updateNotificacion(int id,int num_multa, String infraccion,int rangoInicial, int rangoFinal, String fundamento, String tipo,String frecuencia,String frecuente){
+	public long updateMulta(int id,int num_multa, String infraccion,int rangoInicial, int rangoFinal, String fundamento, String tipo,String frecuencia,String frecuente){
 		long result = -1;
 		ContentValues mContentValues = new ContentValues();
 		//mContentValues.put(EsquemaMultas.COLUMN_NAME_ID, id);
@@ -216,94 +216,104 @@ public class AlertasDbAdapter {
 		return result;
 	}
 	
+
+	
+	public boolean deleteMultas(){
+		boolean bandera = false;
+		
+		try {
+			bandera = mSQLiteDatabase.delete(EsquemaMultas.TABLE_NAME, null,null) > 0;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
+		}
+		return bandera;
+	}
+	
+	public boolean deleteUnaMulta(long pk){
+		boolean bandera = false;
+		
+		try {
+			bandera = mSQLiteDatabase.delete(EsquemaMultas.TABLE_NAME, EsquemaMultas.COLUMN_NAME_ID + "=" + pk,null) > 0;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
+		}
+		return bandera;
+	}
+	
+	
+	public boolean deleteTipoMultas(){
+		boolean bandera = false;
+		
+		try {
+			bandera = mSQLiteDatabase.delete(EsquemaTipos.TABLE_NAME, null,null) > 0;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
+		}
+		return bandera;
+	}
+	
+	public boolean deleteUnTipoMulta(long aviso){
+		boolean bandera = false;
+		
+		try {
+			bandera = mSQLiteDatabase.delete(EsquemaTipos.TABLE_NAME, EsquemaTipos.COLUMN_NAME_ID + "=" + aviso,null) > 0;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
+		}
+		return bandera;
+	}
+	
+	
+	
+	
+	/*** Sección destinada a la creación de todas las consultas  ***/
+	
+	
 	
 	//Esta consulta busca las multas mas frecuentes pero puede buscar todas, verificar como voy a solicitar todas
-	public boolean buscaMultasFrecuentes(boolean frecuente){
+	public Cursor buscaMultasFrecuentes(boolean frecuente){
 		Cursor mCursor = null;
 		String frecuencia = (frecuente) ? "1":"0";
 		try {
 			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, new String[] {
 					EsquemaMultas.COLUMN_NAME_ID,
+					EsquemaMultas.COLUMN_NAME_NUMERO_MULTA,
+					EsquemaMultas.COLUMN_NAME_FRECUENCIA ,
 					EsquemaMultas.COLUMN_NAME_INFRACCION},
 					EsquemaMultas.COLUMN_NAME_FRECUENTE + "=" + frecuencia,
-											null, null, null, null, null);
+											null, null, null,  EsquemaMultas.COLUMN_NAME_FRECUENCIA,null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.d("DB", "Ocurrio un error al realizar una consulta pasando como parametro el tipo de notificacion " + e.getMessage());
 		}
-		if (mCursor.moveToFirst()){return true;}else{return false;}
+		return mCursor;
 		
 	}
 	
-	public boolean deleteNotificacion(){
-		boolean bandera = false;
-		
-		try {
-			bandera = mSQLiteDatabase.delete(EsquemaNotificaciones.TABLE_NAME, null,null) > 0;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
-		}
-		return bandera;
-	}
 	
-	public boolean deleteNotificacion(long notificacion){
-		boolean bandera = false;
-		
-		try {
-			bandera = mSQLiteDatabase.delete(EsquemaNotificaciones.TABLE_NAME, EsquemaNotificaciones.COLUMN_NAME_ID + "=" + notificacion,null) > 0;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
-		}
-		return bandera;
-	}
-	
-	
-	public boolean deleteAviso(){
-		boolean bandera = false;
-		
-		try {
-			bandera = mSQLiteDatabase.delete(EsquemaAvisos.TABLE_NAME, null,null) > 0;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
-		}
-		return bandera;
-	}
-	
-	public boolean deleteAviso(long aviso){
-		boolean bandera = false;
-		
-		try {
-			bandera = mSQLiteDatabase.delete(EsquemaAvisos.TABLE_NAME, EsquemaAvisos.COLUMN_NAME_ID + "=" + aviso,null) > 0;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al borrar una notificacion " + e.getMessage());
-		}
-		return bandera;
-	}
-	
-	
-	public Cursor fetchAllNotificaciones(String tipNotificacion){
+	public Cursor RetornaTodasLasMultas(int tipoMulta){
 		Cursor mCursor = null;
 		
 		try {
-			mCursor = mSQLiteDatabase.query(true, EsquemaNotificaciones.TABLE_NAME, new String[] {EsquemaNotificaciones.COLUMN_NAME_ID,
-											EsquemaNotificaciones.COLUMN_NAME_TITULO, EsquemaNotificaciones.COLUMN_NAME_TEXTO,
-											EsquemaNotificaciones.COLUMN_NAME_FECHA, EsquemaNotificaciones.COLUMN_NAME_LONGITUD, 
-											EsquemaNotificaciones.COLUMN_NAME_LATITUD, EsquemaNotificaciones.COLUMN_NAME_TIPO},
-											EsquemaNotificaciones.COLUMN_NAME_TIPO + "=" + tipNotificacion,
-											null, null, null, null, null);
+			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, new String[] {
+					EsquemaMultas.COLUMN_NAME_ID,
+					EsquemaMultas.COLUMN_NAME_NUMERO_MULTA,
+					EsquemaMultas.COLUMN_NAME_INFRACCION},
+					EsquemaMultas.COLUMN_NAME_TIPO + "=" + tipoMulta,
+					null, null, null, EsquemaMultas.COLUMN_NAME_NUMERO_MULTA, null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al realizar una consulta pasando como parametro el tipo de notificacion " + e.getMessage());
+			Log.e("DB", "Ocurrio un error al realizar una consulta pasando como parametro el tipo de notificacion " + e.getMessage());
 		}
 		
 		return mCursor;
@@ -311,18 +321,17 @@ public class AlertasDbAdapter {
 	
 	
 	 
-	public Cursor fetchAllAvisos(String notificacion){
+	public Cursor buscaTiposDeMultas(String notificacion){
 		Cursor mCursor = null;
 		
 		try {
-			mCursor = mSQLiteDatabase.query(true, EsquemaAvisos.TABLE_NAME, new String[] {EsquemaAvisos.COLUMN_NAME_ID,
-												EsquemaAvisos.COLUMN_NAME_NOTIFICACION,EsquemaAvisos.COLUMN_NAME_AVISO} , 
-												EsquemaAvisos.COLUMN_NAME_NOTIFICACION + "=" + notificacion,
-												null, null, null, null, null);
+			mCursor = mSQLiteDatabase.query(true, EsquemaTipos.TABLE_NAME, new String[] {EsquemaTipos.COLUMN_NAME_ID,
+					EsquemaTipos.COLUMN_NAME_ID,EsquemaTipos.COLUMN_NAME_TIPO,EsquemaTipos.COLUMN_NAME_DESCRIPCION} , 
+					null,null, null, null, null, EsquemaTipos.COLUMN_NAME_TIPO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al intentar acceder a los avisos de la notificaci�n " + notificacion + "  " + e.getMessage());
+			Log.d("DB", "Ocurrio un error al intentar acceder a los avisos de la notificación " + notificacion + "  " + e.getMessage());
 		}
 		return mCursor;
 	}

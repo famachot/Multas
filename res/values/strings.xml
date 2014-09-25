@@ -39,7 +39,18 @@
      </string-array>
     
     
+     <!-- Progres Bar Tittle -->
+     <string name="tituloProgresBar">Conectando...</string>
+     
+     
+     
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    
+    
+    
+    
+    
 
 </resources>

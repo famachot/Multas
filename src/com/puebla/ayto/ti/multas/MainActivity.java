@@ -3,9 +3,17 @@ package com.puebla.ayto.ti.multas;
 
 
 
-import fragments.LosMasComunes;
-import baseAdapterListView.NavigationAdapter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
+import fragments.LosMasComunes;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.puebla.ayto.ti.multas.fragments.*;
+
+import baseAdapterListView.NavigationAdapter;
 import br.liveo.utils.Constant;
 import br.liveo.utils.Menus;
 import navigationList.NavigationList;
@@ -13,8 +21,13 @@ import navigationList.NavigationList;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +45,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.puebla.ayto.ti.multas.objects.Multa;
+import com.puebla.ayto.ti.multas.objects.TiposDeMulta;
+import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
+
+import dataBase.AlertasDbAdapter;
+
 
 
 
@@ -48,6 +67,13 @@ public class MainActivity extends ActionBarActivity {
 	private ActionBarDrawerToggleCompat mDrawerToggle;
 	
 	private NavigationAdapter navigationAdapter;
+	
+	
+	private AlertasDbAdapter DB;
+	
+	private static final String TAG_ASYN_CONECTOR ="TAG_ASYNC_MULTAS";
+	private static final String TAG_DEBUG ="TAG_DEBUG";
+	private static final String TAG_RECUPERAR_DATOS ="TAG_RECUPERAR_DATOS";
 	
 	
 	
@@ -101,7 +127,7 @@ public class MainActivity extends ActionBarActivity {
 	    	setFragmentList(lastPosition);	    	
 	    }
 		
-		
+		verificaDatosDB();
 		
 		}
 	
@@ -234,7 +260,7 @@ private void setFragmentList(int position){
 		
 		switch (position) {
 		case 0:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new LasMasFrecuentesFragment()).commit();
 			break;					
 		case 1:			
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();
@@ -283,5 +309,278 @@ private void setFragmentList(int position){
 			supportInvalidateOptionsMenu();			
 		}		
 	}
+	
+	
+	
+	
+	
+	
+	
+	/*** Sección para verificar si ya hay datos en la BD  ***/
+	
+	
+	
+	
+	  public void RecuperarTiposMulta(){
+	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/tipos/");
+	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
+	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
+	    }
+	  
+	  public void RecuperarMulta(){
+	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/multas/");
+	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
+	    	new AsyncSolicitaMultas(this).execute(url);
+	    }
+	
+	public boolean verificaDatosDB() {
+		Cursor mCursor = null;
+		 boolean bande = true;
+		try {
+			DB = new AlertasDbAdapter(this);
+			
+			DB.open();
+
+			mCursor = DB.buscaMultasFrecuentes(true);
+				if (mCursor.moveToFirst()) {
+					do {
+						Log.d(TAG_RECUPERAR_DATOS,"Los datos recuperados son id :" + mCursor.getInt(0) + " Multas: " + mCursor.getString(2));
+						
+					}while (mCursor.moveToNext());
+				}else {
+				Log.d(TAG_DEBUG,"No hay datos en la BD, se procedera a descargarlos");
+				RecuperarTiposMulta();
+				
+			}
+		} catch (SQLException e) {
+			Log.e(TAG_RECUPERAR_DATOS, "Error en la BD");
+			e.printStackTrace();
+			bande = false;
+		}
+	
+	
+		return bande;
+	}
+	
+	private boolean agregaMultas(ArrayList<Multa> multas){
+		DB = new AlertasDbAdapter(this);
+		 Long result = null;
+		int contador = multas.size();
+		boolean bandera = true; 
+		 
+		 
+		 Log.d(TAG_DEBUG, "Antes de intentar crear la notificacion en la bd ");
+		 try {
+			DB.open();
+			for(int i = 0; i<contador;i++) {
+				//Multa mMulta = multas.get(i);
+				
+			result = DB.CreateMulta(multas.get(i).getId(), multas.get(i).getMulta_id(), 
+						multas.get(i).getMulta(),multas.get(i).getRango_importe_ini(), 
+					 multas.get(i).getRango_importe_fin(), multas.get(i).getFundamento(),
+					 multas.get(i).getTipo(), multas.get(i).getFrecuencia(),
+					  (multas.get(i).getFrecuente()) ? "1":"0");
+				Log.d(TAG_DEBUG,"Se agrego en la BD ->" + multas.get(i).getMulta());
+				if (result == -1) {
+					Log.e(TAG_DEBUG,"No se agrego el siguiete objeto  -> id -> " + multas.get(i).getId() + ", Multa -> "  + multas.get(i).getMulta());
+					bandera = false;
+				}
+			}
+			
+		
+			DB.close();
+		} catch (SQLException e) {
+			Log.e(TAG_DEBUG, "Ocurrio un error al intentar crear una de las multas, se inspecciona el bloque db " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return bandera;
+		
+	}
+	  
+	private boolean agregaTiposMultas(ArrayList<TiposDeMulta> tiposMulta){
+		DB = new AlertasDbAdapter(this);
+		 Long result = null;
+		int contador = tiposMulta.size();
+		boolean bandera = true; 
+		 
+		 
+		 Log.d(TAG_DEBUG, "Antes de intentar crear la notificacion en la bd ");
+		 try {
+			DB.open();
+			for(int i = 0; i<contador;i++) {
+				//Multa mMulta = multas.get(i);
+				
+			result = DB.CreateTipoMulta(tiposMulta.get(i).getId(), tiposMulta.get(i).getTip_multa(), 
+					tiposMulta.get(i).getDescripcion());
+				if (result == -1) {
+					Log.e(TAG_DEBUG,"No se agrego el siguiete objeto id -> " + tiposMulta.get(i).getId() + ", Tipo de Multa -> "  + tiposMulta.get(i).getDescripcion());
+					bandera = false;
+				}
+			}
+			
+		
+			DB.close();
+		} catch (SQLException e) {
+			Log.e(TAG_DEBUG, "Ocurrio un error al intentar crear uno de los tipos de multa, se inspecciona el bloque db " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return bandera;
+		
+	}
+	
+	
+	
+    public class AsyncSolicitaTiposDeMultas extends AsyncTask<String, Long, String>  {
+    	private Context mContext;
+       	private ProgressDialog pd;
+    	
+       	public AsyncSolicitaTiposDeMultas(Context mContext){
+    		this.mContext = mContext;
+    		pd = new ProgressDialog(mContext);
+    	}
+    
+    	@Override
+    	protected void onPreExecute() {
+    		pd.setIndeterminate(true);
+    		pd.setMessage("Cargando información...");
+    		pd.setTitle(R.string.tituloProgresBar);
+    		pd.show();
+    		super.onPreExecute();
+    	}
+//http://192.168.134.13/notificaciones/notificacion/1/
+    	@Override
+    	protected String doInBackground(String... urls) {
+
+    		try {
+    			Log.d(TAG_ASYN_CONECTOR, "La consulta se realizara a la url: " + urls[0]);
+    			return HttpRequest.get(urls[0]).accept("application/json").body();
+    			
+    		} catch (HttpRequestException exception) {
+    			Log.e(TAG_ASYN_CONECTOR, exception.getMessage());
+    			return null;
+    		}
+    	}
+
+    	
+    	@Override
+    	protected void onPostExecute(String result) {
+    		Log.d(TAG_ASYN_CONECTOR, "El resultado de la consulta es: " + result);
+    		
+    		if (result != null){
+    		ArrayList<TiposDeMulta> mGetTiposMultas = getTiposDeMultas(result);
+    			//mostrarDatos(mGetMultas, tipo);
+    		if(agregaTiposMultas(mGetTiposMultas)) { 
+    			RecuperarMulta();
+    		}else {
+    			 Log.e(TAG_ASYN_CONECTOR, "No se solicitaron las multas por que ocurrio un error ");
+    		}
+    	 
+    		
+    		
+    		}
+    		else
+    		{
+    			//datoRecibido = false;
+    			Toast.makeText(mContext, "No se obtuvieron datos de internet", Toast.LENGTH_SHORT).show();
+    		}
+    		
+    		Log.d(TAG_ASYN_CONECTOR, "despues de crear el objeto tipo notificacion ");
+    		
+    		pd.dismiss();
+    		super.onPostExecute(result);
+    	}	
+    }
+	
+    public class AsyncSolicitaMultas extends AsyncTask<String, Long, String>  {
+    	private Context mContext;
+       	private ProgressDialog pd;
+    	
+       	public AsyncSolicitaMultas(Context mContext){
+    		this.mContext = mContext;
+    		pd = new ProgressDialog(mContext);
+    	}
+    
+    	@Override
+    	protected void onPreExecute() {
+    		pd.setIndeterminate(true);
+    		pd.setMessage("Cargando información...");
+    		pd.setTitle(R.string.tituloProgresBar);
+    		pd.show();
+    		super.onPreExecute();
+    	}
+//http://192.168.134.13/notificaciones/notificacion/1/
+    	@Override
+    	protected String doInBackground(String... urls) {
+
+    		try {
+    			Log.d(TAG_ASYN_CONECTOR, "La consulta se realizara a la url: " + urls[0]);
+    			return HttpRequest.get(urls[0]).accept("application/json").body();
+    			
+    		} catch (HttpRequestException exception) {
+    			Log.d(TAG_ASYN_CONECTOR, exception.getMessage());
+    			return null;
+    		}
+    	}
+
+    	
+    	@Override
+    	protected void onPostExecute(String result) {
+    		Log.d(TAG_ASYN_CONECTOR, "El resultado de la consulta es: " + result);
+    		
+    		if (result != null){
+    		ArrayList<Multa> mGetMultas = getMultas(result);
+    			//mostrarDatos(mGetMultas, tipo);
+    		}
+    		else
+    		{
+    			//datoRecibido = false;
+    			Toast.makeText(mContext, "No se obtuvieron datos de internet", Toast.LENGTH_SHORT).show();
+    		}
+    		
+    		Log.d(TAG_ASYN_CONECTOR, "despues de crear el objeto tipo notificacion ");
+    		
+    		pd.dismiss();
+    		super.onPostExecute(result);
+    	}	
+    }
+	
+	
+	
+    private ArrayList<TiposDeMulta> getTiposDeMultas(String json) {
+    	final Gson gson = new Gson();
+		final Type tipoListMultas = new TypeToken<ArrayList<TiposDeMulta>>(){}.getType();
+		ArrayList<TiposDeMulta> listMultas;
+		 
+		try {
+			listMultas = gson.fromJson(json, tipoListMultas);
+		} catch (JsonSyntaxException e) { 
+			e.printStackTrace();
+			listMultas= null;
+			Log.d(TAG_ASYN_CONECTOR, "Error durante la creación de los objetos (Multas): " + e.getMessage());
+		}
+		 return listMultas;
+	}
+	
+    private ArrayList<Multa> getMultas(String json) {
+    	
+    	final Gson gson = new Gson();
+		final Type tipoListMultas = new TypeToken<ArrayList<Multa>>(){}.getType();
+		ArrayList<Multa> listMultas;
+		 
+		try {
+			listMultas = gson.fromJson(json, tipoListMultas);
+		} catch (JsonSyntaxException e) { 
+			e.printStackTrace();
+			listMultas= null;
+			Log.d(TAG_ASYN_CONECTOR, "Error durante la creación de los objetos (Multas): " + e.getMessage());
+		}
+		 return listMultas;
+	}
+	
+	
+	
+	
 	
 }
