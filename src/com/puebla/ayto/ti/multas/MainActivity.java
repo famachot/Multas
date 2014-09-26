@@ -127,8 +127,8 @@ public class MainActivity extends ActionBarActivity {
 	    	setFragmentList(lastPosition);	    	
 	    }
 		
-		verificaDatosDB();
-		
+		//RecuperarTiposMulta();
+		verificaTiposMultas();
 		}
 	
 	
@@ -321,45 +321,53 @@ private void setFragmentList(int position){
 	
 	
 	
-	  public void RecuperarTiposMulta(){
-	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/tipos/");
-	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
-	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
-	    }
-	  
-	  public void RecuperarMulta(){
-	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/multas/");
-	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
-	    	new AsyncSolicitaMultas(this).execute(url);
-	    }
-	
-	public boolean verificaDatosDB() {
-		Cursor mCursor = null;
-		 boolean bande = true;
-		try {
-			DB = new AlertasDbAdapter(this);
-			
-			DB.open();
 
-			mCursor = DB.buscaMultasFrecuentes(true);
-				if (mCursor.moveToFirst()) {
-					do {
-						Log.d(TAG_RECUPERAR_DATOS,"Los datos recuperados son id :" + mCursor.getInt(0) + " Multas: " + mCursor.getString(2));
-						
-					}while (mCursor.moveToNext());
-				}else {
-				Log.d(TAG_DEBUG,"No hay datos en la BD, se procedera a descargarlos");
-				RecuperarTiposMulta();
-				
-			}
-		} catch (SQLException e) {
-			Log.e(TAG_RECUPERAR_DATOS, "Error en la BD");
+	  
+	  
+	  public boolean verificaTiposMultas() {
+		  DB = new AlertasDbAdapter(this);
+		  Cursor mCursor = null;
+		  
+		  ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
+		  ArrayList<Multa> mListMultas = new ArrayList<Multa>();
+		  
+		  try {
+			  DB.open();
+			  
+			
+			  mListaDeTipos = DB.buscaTiposDeMultasObjects();
+			  mListMultas = DB.buscaMultasFrecuentes(true);
+			  
+			  for(int x=0; x < mListaDeTipos.size(); x++) {
+				  Log.d(TAG_RECUPERAR_DATOS, "Los datos almacenados en la BD son (Objetos) ID: " + mListaDeTipos.get(x).getId() + ", texto -> " + mListaDeTipos.get(x).getDescripcion());
+			  }
+			  
+			  for(int x=0; x < mListMultas.size(); x++) {
+				  Log.d(TAG_RECUPERAR_DATOS, "Los datos almacenados en la BD son (Objetos) ID: " + mListMultas.get(x).getId() + ", texto -> " + mListMultas.get(x).getMulta());
+			  }
+			
+			  
+			  
+			  DB.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DB.close();
+			Log.e(TAG_RECUPERAR_DATOS, "Error en el try verifica TiposMultas " + e.getMessage());
+			
 			e.printStackTrace();
-			bande = false;
 		}
+		  
+		  
+		  return true;}
 	
-	
-		return bande;
+	public void obtenerDatosDeMultas() {
+
+
+			
+			
+			
+			
+
 	}
 	
 	private boolean agregaMultas(ArrayList<Multa> multas){
@@ -416,6 +424,8 @@ private void setFragmentList(int position){
 				if (result == -1) {
 					Log.e(TAG_DEBUG,"No se agrego el siguiete objeto id -> " + tiposMulta.get(i).getId() + ", Tipo de Multa -> "  + tiposMulta.get(i).getDescripcion());
 					bandera = false;
+				}else {
+					Log.d(TAG_DEBUG,"Se agrego el siguiete objeto id -> " + tiposMulta.get(i).getId() + ", Tipo de Multa -> "  + tiposMulta.get(i).getDescripcion() + ", En la Base de datos");
 				}
 			}
 			
@@ -430,7 +440,17 @@ private void setFragmentList(int position){
 		
 	}
 	
-	
+	  public void RecuperarTiposMulta(){
+	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/tipos/");
+	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
+	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
+	    }
+	  
+	  public void RecuperarMulta(){
+	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/multas/");
+	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
+	    	new AsyncSolicitaMultas(this).execute(url);
+	    }
 	
     public class AsyncSolicitaTiposDeMultas extends AsyncTask<String, Long, String>  {
     	private Context mContext;
@@ -532,6 +552,7 @@ private void setFragmentList(int position){
     		if (result != null){
     		ArrayList<Multa> mGetMultas = getMultas(result);
     			//mostrarDatos(mGetMultas, tipo);
+    		    agregaMultas(mGetMultas);
     		}
     		else
     		{

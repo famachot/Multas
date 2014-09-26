@@ -1,13 +1,18 @@
 
 package dataBase;
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import com.puebla.ayto.ti.multas.objects.*;
 
 
 
@@ -276,33 +281,68 @@ public class AlertasDbAdapter {
 	
 	/*** Sección destinada a la creación de todas las consultas  ***/
 	
-	
+	/*** 
+	 * 
+	 *   											EsquemaMultas.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
+													EsquemaMultas.COLUMN_NAME_NUMERO_MULTA + " INTEGER NULL," +
+													EsquemaMultas.COLUMN_NAME_INFRACCION + " TEXT NOT NULL,"+
+													EsquemaMultas.COLUMN_NAME_RANGO_INICIAL + " INTEGER NOT NULL," +
+													EsquemaMultas.COLUMN_NAME_RANGO_FINAL + " INTEGER NULL," +
+													EsquemaMultas.COLUMN_NAME_FUNDAMENTO + " CHAR(80) NOT NULL," +
+													EsquemaMultas.COLUMN_NAME_TIPO + " INTEGER NOT NULL," +
+													EsquemaMultas.COLUMN_NAME_FRECUENCIA + " INTEGER NULL," +
+													EsquemaMultas.COLUMN_NAME_FRECUENTE + " CHAR(2) NOT NULL," + 
+	 *   ***/
 	
 	//Esta consulta busca las multas mas frecuentes pero puede buscar todas, verificar como voy a solicitar todas
-	public Cursor buscaMultasFrecuentes(boolean frecuente){
+	public ArrayList<Multa> buscaMultasFrecuentes(boolean frecuente){
+		ArrayList<Multa> mListMultas = new ArrayList<Multa>();
 		Cursor mCursor = null;
 		String frecuencia = (frecuente) ? "1":"0";
 		try {
-			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, new String[] {
-					EsquemaMultas.COLUMN_NAME_ID,
-					EsquemaMultas.COLUMN_NAME_NUMERO_MULTA,
-					EsquemaMultas.COLUMN_NAME_FRECUENCIA ,
-					EsquemaMultas.COLUMN_NAME_INFRACCION},
+			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null,
 					EsquemaMultas.COLUMN_NAME_FRECUENTE + "=" + frecuencia,
 											null, null, null,  EsquemaMultas.COLUMN_NAME_FRECUENCIA,null);
+			
+			if(mCursor != null) {
+			if(	mCursor.moveToFirst()) {
+					do {
+						Log.d("DB", "Entro en el ciclo do while ");
+						Multa mMulta = new Multa();
+						mMulta.setId(mCursor.getInt(0));
+						Log.d("DB", "Despues de recuperar el id " + mCursor.getInt(0));
+						mMulta.setMulta_id(mCursor.getInt(1));
+						
+						mMulta.setMulta(mCursor.getString(2));
+						Log.d("DB", "Despues de recuperar la multa " + mCursor.getInt(2));
+						
+						mMulta.setRango_importe_ini(mCursor.getString(columnIndex));
+						
+						
+						Log.d("DB", "Despues de recuperar el numero de multa  " + mCursor.getInt(1));
+						mMulta.setFrecuecia(mCursor.getInt(2));
+						Log.d("DB", "Despues de recuperar la frecuencia " + mCursor.getInt(2));
+						
+						mListMultas.add(mMulta);
+						
+					}while(mCursor.moveToNext());
+				}
+			}
+			
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al realizar una consulta pasando como parametro el tipo de notificacion " + e.getMessage());
+			Log.e("DB", "Ocurrio un error al realizar una consulta pasando como parametro el tipo de notificacion " + e.getMessage());
 		}
-		return mCursor;
+		return mListMultas;
 		
 	}
 	
 	
-	public Cursor RetornaTodasLasMultas(int tipoMulta){
+	public ArrayList<Multa> RetornaMultasPorTipo(int tipoMulta){
 		Cursor mCursor = null;
-		
+		ArrayList<Multa> mListMulta = new ArrayList<Multa>();
 		try {
 			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, new String[] {
 					EsquemaMultas.COLUMN_NAME_ID,
@@ -310,13 +350,30 @@ public class AlertasDbAdapter {
 					EsquemaMultas.COLUMN_NAME_INFRACCION},
 					EsquemaMultas.COLUMN_NAME_TIPO + "=" + tipoMulta,
 					null, null, null, EsquemaMultas.COLUMN_NAME_NUMERO_MULTA, null);
-		} catch (Exception e) {
+			
+			if(mCursor.moveToFirst()) {
+				do {
+					Multa mMulta = new Multa();
+					Log.d("DB", "Entro en el ciclo do while ");
+
+					mMulta.setId(mCursor.getInt(0));
+					Log.d("DB", "Despues de recuperar el id " + mCursor.getInt(0));
+					mMulta.setMulta_id(mCursor.getInt(1));
+					Log.d("DB", "Despues de recuperar el numero de multa  " + mCursor.getInt(1));
+					mMulta.setFrecuecia(mCursor.getInt(2));
+					Log.d("DB", "Despues de recuperar la frecuencia " + mCursor.getInt(2));
+					mMulta.setMulta(mCursor.getString(3));
+					Log.d("DB", "Despues de recuperar la multa " + mCursor.getInt(3));
+					mListMulta.add(mMulta);
+				}while(mCursor.moveToNext());
+			}
+		} catch (SQLiteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("DB", "Ocurrio un error al realizar una consulta pasando como parametro el tipo de notificacion " + e.getMessage());
+			Log.e("DB", "Ocurrio un error al realizar una consulta pen el metodo RetornaMultasPorTipo " + e.getMessage());
 		}
 		
-		return mCursor;
+		return mListMulta;
 	}
 	
 	
@@ -325,16 +382,46 @@ public class AlertasDbAdapter {
 		Cursor mCursor = null;
 		
 		try {
-			mCursor = mSQLiteDatabase.query(true, EsquemaTipos.TABLE_NAME, new String[] {EsquemaTipos.COLUMN_NAME_ID,
-					EsquemaTipos.COLUMN_NAME_ID,EsquemaTipos.COLUMN_NAME_TIPO,EsquemaTipos.COLUMN_NAME_DESCRIPCION} , 
-					null,null, null, null, null, EsquemaTipos.COLUMN_NAME_TIPO);
+			//mCursor = mSQLiteDatabase.query(true, EsquemaTipos.TABLE_NAME, null , null,null, null, null,null,null);
+			mCursor = mSQLiteDatabase.rawQuery("select * from TIPO_MULTAS", null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d("DB", "Ocurrio un error al intentar acceder a los avisos de la notificación " + notificacion + "  " + e.getMessage());
+			Log.e("DB", "Ocurrio un error al intentar obtener los datos de la tabla Tipos de Multas -> " + e.getMessage());
 		}
 		return mCursor;
 	}
+	
+	
+	//Tiposd e multas modificado
+	public ArrayList<TiposDeMulta> buscaTiposDeMultasObjects(){
+		Cursor mCursor = null;
+		ArrayList<TiposDeMulta> mListTiposMulta = new ArrayList<TiposDeMulta>();
+		try {
+			mCursor = mSQLiteDatabase.query(true, EsquemaTipos.TABLE_NAME, null , null,null, null, null,EsquemaTipos.COLUMN_NAME_TIPO,null);
+			
+			if(mCursor != null) {
+				if(mCursor.moveToFirst()) {
+					do {
+						TiposDeMulta mTipoMultas = new TiposDeMulta();
+						mTipoMultas.setId(mCursor.getInt(0));
+						mTipoMultas.setTipo(mCursor.getString(1));
+						mTipoMultas.setDescripcion(mCursor.getString(2));
+						mListTiposMulta.add(mTipoMultas);
+					}while(mCursor.moveToNext());
+				}
+			}
+			
+			//mCursor = mSQLiteDatabase.rawQuery("select * from TIPO_MULTAS", null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("DB", "Ocurrio un error al intentar obtener los datos de la tabla Tipos de Multas -> " + e.getMessage());
+		}
+		return mListTiposMulta;
+	}
+	
+	
 	
 	
 	
