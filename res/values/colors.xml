@@ -6,4 +6,6 @@
 	<!-- Colores utilizados para el menu lateral -->
     <color name="divide_listview">#ededed</color>
     <color name="datos_user_menu">#686868</color>
+    
+    
 </resources>

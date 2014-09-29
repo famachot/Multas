@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
 	private ActionBarDrawerToggleCompat mDrawerToggle;
 	
 	private NavigationAdapter navigationAdapter;
-	
+	 
 	
 	private AlertasDbAdapter DB;
 	
@@ -270,7 +270,7 @@ private void setFragmentList(int position){
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
 			break;			
 		case 2:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();						
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new MultasPorTipoFragment()).commit();						
 			break;				
 			
 		default:

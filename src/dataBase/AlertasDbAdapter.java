@@ -299,6 +299,9 @@ public class AlertasDbAdapter {
 		ArrayList<Multa> mListMultas = new ArrayList<Multa>();
 		Cursor mCursor = null;
 		String frecuencia = (frecuente) ? "1":"0";
+		boolean elemento_26 = false;
+		boolean elemento_6 = false;
+		boolean elemento_87 = false;
 		try {
 			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null,
 					EsquemaMultas.COLUMN_NAME_FRECUENTE + "=" + frecuencia,
@@ -320,8 +323,34 @@ public class AlertasDbAdapter {
 						mMulta.setFundamento(mCursor.getString(5));
 						mMulta.setTipo(mCursor.getInt(6));
 						mMulta.setFrecuecia(mCursor.getInt(7));
-						mMulta.setFrecuente(frecuente);						
-						mListMultas.add(mMulta);
+						mMulta.setFrecuente(frecuente);		
+						
+						if (mCursor.getInt(1) == 26) {
+							if (elemento_26 == false) {
+								mListMultas.add(mMulta);
+								elemento_26 = true;
+							}
+						}else {
+							if (mCursor.getInt(1) == 6) {
+								if (elemento_6 == false) {
+									mListMultas.add(mMulta);
+									elemento_6 = true;
+								}
+							}else {
+								if (mCursor.getInt(1) == 87) {
+									if (elemento_87 == false) {
+										mListMultas.add(mMulta);
+										elemento_87 = true;
+									}
+								}else {
+									mListMultas.add(mMulta);
+								}
+								
+								
+							}
+						}
+						
+						
 						
 					}while(mCursor.moveToNext());
 				}
@@ -341,6 +370,11 @@ public class AlertasDbAdapter {
 	public ArrayList<Multa> RetornaMultasPorTipo(int tipoMulta){
 		Cursor mCursor = null;
 		ArrayList<Multa> mListMulta = new ArrayList<Multa>();
+		
+		boolean elemento_26 = false;
+		boolean elemento_6 = false;
+		boolean elemento_87 = false;
+		
 		try {
 			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null,
 					EsquemaMultas.COLUMN_NAME_TIPO + "=" + tipoMulta,
@@ -361,7 +395,38 @@ public class AlertasDbAdapter {
 					mMulta.setTipo(mCursor.getInt(6));
 					mMulta.setFrecuecia(mCursor.getInt(7));
 					//mMulta.setFrecuente(frecuente);	
-					mListMulta.add(mMulta);
+					
+					
+					if (mCursor.getInt(1) == 26) {
+						if (elemento_26 == false) {
+							mListMulta.add(mMulta);
+							elemento_26 = true;
+						}
+					}else {
+						if (mCursor.getInt(1) == 6) {
+							if (elemento_6 == false) {
+								mListMulta.add(mMulta);
+								elemento_6 = true;
+							}
+						}else {
+							if (mCursor.getInt(1) == 87) {
+								if (elemento_87 == false) {
+									mListMulta.add(mMulta);
+									elemento_87 = true;
+								}
+							}else {
+								mListMulta.add(mMulta);
+							}
+							
+							
+						}
+					}
+					
+					
+				//	mListMulta.add(mMulta);
+				
+				
+				
 				}while(mCursor.moveToNext());
 			}
 		} catch (SQLiteException e) {

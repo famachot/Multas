@@ -38,14 +38,14 @@ public class MasFrecuentesFragment extends Fragment {
 		
 		DB.open();
 		ArrayList<Multa> mListaMulta = DB.buscaMultasFrecuentes(true);
-		ArrayList<Multa> mListaMulta_cp = new ArrayList<Multa>();
+		//ArrayList<Multa> mListaMulta_cp = new ArrayList<Multa>();
 		DB.close();
-		boolean elemento_26 = false;
-		boolean elemento_6 = false;
+		//boolean elemento_26 = false;
+	//	boolean elemento_6 = false;
 
 		
 
-		
+		/*
 		for(int x=0; x < mListaMulta.size(); x++) {
 			
 			if (mListaMulta.get(x).getMulta_id() == 26) {
@@ -71,8 +71,8 @@ public class MasFrecuentesFragment extends Fragment {
 			
 			
 			Log.d("Debug_Fragment", "Los datos almacenados en la BD son (Objetos) ID: " + mListaMulta.get(x).getId() + ", Infraccion -> " + mListaMulta.get(x).getMulta());
-		  }
-		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta_cp);
+		  }*/
+		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta);
 		// TODO Auto-generated method stub		
 		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
 		

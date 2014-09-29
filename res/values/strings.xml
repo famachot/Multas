@@ -53,10 +53,25 @@
     <string	name="text_tipo_multa">Multas</string>
     
     <string	name="num_frecuente">La más frecuente</string>
+    
+    <string	name="txt_frecuente">Frecuente</string>
     <string	name="num_frecuente_id">1</string>
+    <string	name="titulo_infraccion">Infracción</string>
+    <string	name="infraccion">Conducir sin el cinturón de seguridad puesto</string>
+    <string	name="fundamento_legal">Fundamento Legal</string>
+    <string	name="fundamento">Artículo 304, fracción II</string> 
+    <string	name="titulo_multa">Multa</string>
+    <string	name="multa">De 8 a 12 días</string>
+    
+    <string	name="titulo_salario">Salario Minimo</string>
+    <string	name="salario">$56.50</string>
+    
+    
+    
     
     <string	name="item_26">Conducir vehículos o permitir que se haga sin la licencia o permiso correspondiente, o estando roto,deteriorado o ilegible</string>
     <string	name="item_6">Circular sin placas o permiso de circulación correspondientes a</string>
+    <string	name="item_87">Provocar, intencional o negligentemente, un accidente de tránsito</string>
     
     
     
