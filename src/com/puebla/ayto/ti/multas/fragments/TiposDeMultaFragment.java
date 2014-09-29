@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +29,17 @@ import com.google.gson.reflect.TypeToken;
 
 
 
+import dataBase.AlertasDbAdapter;
+
+
+
 
 
 import com.puebla.ayto.ti.multas.R;
+import com.puebla.ayto.ti.multas.adapter.*;
+import com.puebla.ayto.ti.multas.objects.*;
 
-
-public class LasMasFrecuentesFragment extends Fragment {
+public class TiposDeMultaFragment extends Fragment {
 	
 	
 	
@@ -42,20 +48,35 @@ public class LasMasFrecuentesFragment extends Fragment {
 	private static final String TAG_RECUPERAR_DATOS ="TAG_RECUPERAR_DATOS";
 	
 	
-	private TextView txtFragmentDownload;
+	private AdapterElementos mAdaptadorTipo; 
+	private AlertasDbAdapter DB;
+	private TiposDeMulta mListaTipos;
+	
+	//private TextView txtFragmentDownload;
 	private boolean searchCheck;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub		
-		View rootView = inflater.inflate(R.layout.multas_fragment, container, false);
 		
-		txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
+		DB = new AlertasDbAdapter(getActivity());
+		
+		DB.open();
+		ArrayList<TiposDeMulta> mListaTipos = DB.buscaTiposDeMultasObjects();
+		DB.close();
+		
+		mAdaptadorTipo = new AdapterElementos(getActivity(), mListaTipos);
+		// TODO Auto-generated method stub		
+		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
+		
+		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
+		
+		mListView.setAdapter(mAdaptadorTipo);
+		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
 		
 //		String info = (verificaDatosDB()) ? "Si funciono" : "jeje No funciono";
 		
 		
-		txtFragmentDownload.setText("");
+		//txtFragmentDownload.setText("");
 		
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT ));		
 		return rootView;		

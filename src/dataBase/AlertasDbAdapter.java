@@ -308,21 +308,19 @@ public class AlertasDbAdapter {
 			if(	mCursor.moveToFirst()) {
 					do {
 						Log.d("DB", "Entro en el ciclo do while ");
+						Log.d("DB", "Despues de recuperar la multa " + mCursor.getInt(2));
+						Log.d("DB", "Despues de recuperar el numero de frecuencia " + mCursor.getInt(7));
+						
 						Multa mMulta = new Multa();
 						mMulta.setId(mCursor.getInt(0));
-						Log.d("DB", "Despues de recuperar el id " + mCursor.getInt(0));
 						mMulta.setMulta_id(mCursor.getInt(1));
-						
 						mMulta.setMulta(mCursor.getString(2));
-						Log.d("DB", "Despues de recuperar la multa " + mCursor.getInt(2));
-						
-						mMulta.setRango_importe_ini(mCursor.getString(columnIndex));
-						
-						
-						Log.d("DB", "Despues de recuperar el numero de multa  " + mCursor.getInt(1));
-						mMulta.setFrecuecia(mCursor.getInt(2));
-						Log.d("DB", "Despues de recuperar la frecuencia " + mCursor.getInt(2));
-						
+						mMulta.setRango_importe_ini(mCursor.getInt(3));
+						mMulta.setRango_importe_fin(mCursor.getInt(4));
+						mMulta.setFundamento(mCursor.getString(5));
+						mMulta.setTipo(mCursor.getInt(6));
+						mMulta.setFrecuecia(mCursor.getInt(7));
+						mMulta.setFrecuente(frecuente);						
 						mListMultas.add(mMulta);
 						
 					}while(mCursor.moveToNext());
@@ -344,26 +342,25 @@ public class AlertasDbAdapter {
 		Cursor mCursor = null;
 		ArrayList<Multa> mListMulta = new ArrayList<Multa>();
 		try {
-			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, new String[] {
-					EsquemaMultas.COLUMN_NAME_ID,
-					EsquemaMultas.COLUMN_NAME_NUMERO_MULTA,
-					EsquemaMultas.COLUMN_NAME_INFRACCION},
+			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null,
 					EsquemaMultas.COLUMN_NAME_TIPO + "=" + tipoMulta,
 					null, null, null, EsquemaMultas.COLUMN_NAME_NUMERO_MULTA, null);
 			
 			if(mCursor.moveToFirst()) {
 				do {
-					Multa mMulta = new Multa();
+				
 					Log.d("DB", "Entro en el ciclo do while ");
 
+					Multa mMulta = new Multa();
 					mMulta.setId(mCursor.getInt(0));
-					Log.d("DB", "Despues de recuperar el id " + mCursor.getInt(0));
 					mMulta.setMulta_id(mCursor.getInt(1));
-					Log.d("DB", "Despues de recuperar el numero de multa  " + mCursor.getInt(1));
-					mMulta.setFrecuecia(mCursor.getInt(2));
-					Log.d("DB", "Despues de recuperar la frecuencia " + mCursor.getInt(2));
-					mMulta.setMulta(mCursor.getString(3));
-					Log.d("DB", "Despues de recuperar la multa " + mCursor.getInt(3));
+					mMulta.setMulta(mCursor.getString(2));
+					mMulta.setRango_importe_ini(mCursor.getInt(3));
+					mMulta.setRango_importe_fin(mCursor.getInt(4));
+					mMulta.setFundamento(mCursor.getString(5));
+					mMulta.setTipo(mCursor.getInt(6));
+					mMulta.setFrecuecia(mCursor.getInt(7));
+					//mMulta.setFrecuente(frecuente);	
 					mListMulta.add(mMulta);
 				}while(mCursor.moveToNext());
 			}

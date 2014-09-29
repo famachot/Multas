@@ -55,10 +55,11 @@ import dataBase.AlertasDbAdapter;
 
 
 
+
 public class MainActivity extends ActionBarActivity {
 
 	private int counterItemDownloads;
-    private int lastPosition = 2;
+    private int lastPosition = 0;
 	
 	private DrawerLayout mDrawerLayout;
 	private LinearLayout mLayoutMenu;
@@ -74,6 +75,8 @@ public class MainActivity extends ActionBarActivity {
 	private static final String TAG_ASYN_CONECTOR ="TAG_ASYNC_MULTAS";
 	private static final String TAG_DEBUG ="TAG_DEBUG";
 	private static final String TAG_RECUPERAR_DATOS ="TAG_RECUPERAR_DATOS";
+	
+
 	
 	
 	
@@ -128,6 +131,7 @@ public class MainActivity extends ActionBarActivity {
 	    }
 		
 		//RecuperarTiposMulta();
+		
 		verificaTiposMultas();
 		}
 	
@@ -260,10 +264,10 @@ private void setFragmentList(int position){
 		
 		switch (position) {
 		case 0:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new LasMasFrecuentesFragment()).commit();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new MasFrecuentesFragment()).commit();
 			break;					
 		case 1:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
 			break;			
 		case 2:			
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new LosMasComunes()).commit();						
@@ -327,27 +331,25 @@ private void setFragmentList(int position){
 	  public boolean verificaTiposMultas() {
 		  DB = new AlertasDbAdapter(this);
 		  Cursor mCursor = null;
-		  
 		  ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
 		  ArrayList<Multa> mListMultas = new ArrayList<Multa>();
-		  
+		  ArrayList<Multa> mListMultasPOrTipo = new ArrayList<Multa>();
 		  try {
 			  DB.open();
-			  
-			
 			  mListaDeTipos = DB.buscaTiposDeMultasObjects();
 			  mListMultas = DB.buscaMultasFrecuentes(true);
-			  
+			  mListMultasPOrTipo = DB.RetornaMultasPorTipo(6);
 			  for(int x=0; x < mListaDeTipos.size(); x++) {
-				  Log.d(TAG_RECUPERAR_DATOS, "Los datos almacenados en la BD son (Objetos) ID: " + mListaDeTipos.get(x).getId() + ", texto -> " + mListaDeTipos.get(x).getDescripcion());
+				  Log.e(TAG_RECUPERAR_DATOS, "Lista de tipos de multa ID: " + mListaDeTipos.get(x).getId() + ", texto -> " + mListaDeTipos.get(x).getDescripcion());
 			  }
-			  
+
 			  for(int x=0; x < mListMultas.size(); x++) {
-				  Log.d(TAG_RECUPERAR_DATOS, "Los datos almacenados en la BD son (Objetos) ID: " + mListMultas.get(x).getId() + ", texto -> " + mListMultas.get(x).getMulta());
+				  Log.d(TAG_RECUPERAR_DATOS, "Los datos almacenados en la BD son (Objetos) ID: " + mListMultas.get(x).getId() + ", Infraccion -> " + mListMultas.get(x).getMulta());
 			  }
-			
 			  
-			  
+			  for(int x=0; x < mListMultasPOrTipo.size(); x++) {
+				  Log.d(TAG_RECUPERAR_DATOS, "Multas por tipo ID: " + mListMultasPOrTipo.get(x).getId() + ", Infraccion -> " + mListMultasPOrTipo.get(x).getMulta());
+			  }
 			  DB.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -441,13 +443,13 @@ private void setFragmentList(int position){
 	}
 	
 	  public void RecuperarTiposMulta(){
-	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/tipos/");
+	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/tipos/");
 	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
 	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
 	    }
 	  
 	  public void RecuperarMulta(){
-	    	String url = String.format("http://192.168.134.13/notificaciones/multas/todas/multas/");
+	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/multas/");
 	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
 	    	new AsyncSolicitaMultas(this).execute(url);
 	    }
@@ -504,9 +506,10 @@ private void setFragmentList(int position){
     		{
     			//datoRecibido = false;
     			Toast.makeText(mContext, "No se obtuvieron datos de internet", Toast.LENGTH_SHORT).show();
+    			Log.d(TAG_ASYN_CONECTOR, "No se descargaron datos, al parecer el permiso de internet no funciona ");
     		}
     		
-    		Log.d(TAG_ASYN_CONECTOR, "despues de crear el objeto tipo notificacion ");
+    		
     		
     		pd.dismiss();
     		super.onPostExecute(result);

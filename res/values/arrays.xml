@@ -8,18 +8,9 @@
     
         <string-array name="nav_menu_items">
         <item>Las más frecuentes</item>
-        <item>Transporte ruta</item>        
-        <item>I Autorizaciones y permisos</item>
-        <item>II Dispositivos y accesorios</item>
-        <item>III De los conductories</item>
-        <item>IV Peatones y pasajeros</item>
-        <item>V Señales utilizadas</item>
-        <item>VI Del estacionamiento</item>
-        <item>VIII Servicio de transporte</item>
-        <item>IX Transporte de personas</item>
-        <item>X Estaciones, terminales</item> 
-        <item>XII De la fuga</item>
-        <item>VI Estacionamieno, Accesos</item>              
+        <item>Todas</item>        
+        <item>Transporte ruta</item>
+                   
     </string-array> 
     
 </resources>

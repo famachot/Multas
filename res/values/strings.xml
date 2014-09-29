@@ -48,7 +48,15 @@
     <string name="action_settings">Settings</string>
     
     
+    <!-- Layout elementos  -->
+    <string	name="id_tipo_multa">II</string>
+    <string	name="text_tipo_multa">Multas</string>
     
+    <string	name="num_frecuente">La más frecuente</string>
+    <string	name="num_frecuente_id">1</string>
+    
+    <string	name="item_26">Conducir vehículos o permitir que se haga sin la licencia o permiso correspondiente, o estando roto,deteriorado o ilegible</string>
+    <string	name="item_6">Circular sin placas o permiso de circulación correspondientes a</string>
     
     
     

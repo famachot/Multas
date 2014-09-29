@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/img_item_frecuente"
+        android:layout_width="?android:attr/listPreferredItemHeight"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/frecuente_1" />
+
+    <TextView
+        android:id="@+id/text_infraccion_frecuente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/img_item_frecuente"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/img_item_frecuente"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/text_num_incidencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/text_infraccion_frecuente"
+        android:layout_marginRight="15dp"
+        android:gravity="bottom"
+        android:text="@string/num_frecuente_id" />
+
+    <TextView
+        android:id="@+id/text_incidencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/text_infraccion_frecuente"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/text_num_incidencia"
+        android:gravity="bottom"
+        android:text="@string/num_frecuente" />
+
+</RelativeLayout>
