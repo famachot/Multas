@@ -2,6 +2,7 @@
 <resources>
     <color name="azulAyuntamiento">#0e4d83</color>
     <color name="colorBlanco">#FFF</color>
+    <color name="azul_detalle">#2198ed</color>
     
 	<!-- Colores utilizados para el menu lateral -->
     <color name="divide_listview">#ededed</color>

@@ -15,7 +15,7 @@
         android:textColor="@color/colorBlanco"/>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/fundamento_legal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -32,7 +32,7 @@
         android:src="@drawable/logo_ayuntamiento_original" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/titulo_fundamento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -40,7 +40,7 @@
         android:textColor="@color/colorBlanco" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/titulo_multa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

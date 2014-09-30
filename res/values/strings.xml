@@ -65,6 +65,10 @@
     
     <string	name="titulo_salario">Salario Minimo</string>
     <string	name="salario">$56.50</string>
+    <string	name="titulo_rango_precio">Rango de costos</string>
+    <string	name="precio">Minimo $200, Maximo $600</string> 
+    <string	name="donde_pagar">Donde Pagar</string>    
+    <string	name="nota_costo_multa">Nota: El número de días dependera de la evaluación que haga el agente detransito sobre el castigo meritorio</string>
     
     
     

@@ -270,7 +270,7 @@ private void setFragmentList(int position){
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
 			break;			
 		case 2:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new MultasPorTipoFragment()).commit();						
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new DetalleMultaFragment()).commit();						
 			break;				
 			
 		default:

@@ -51,4 +51,55 @@
 		       <item name="android:textColorHint">@color/colorBlanco</item>
 		       <item name="android:textSize">10sp</item> 
    		</style>
+   		
+        
+        
+        <style name="styleDetalleMulta"
+		     parent="@android:style/TextAppearance.Medium">
+		      <item name="android:layout_width">wrap_content</item>
+		       <item name="android:layout_height">wrap_content</item>
+		       <item name="android:textColor">@color/azul_detalle</item>
+		       <item name="android:textColorHint">@color/azul_detalle</item>
+			   <item name="android:textSize">20sp</item> 
+			  <item name="android:layout_marginTop">15dp</item>
+			  <item name="android:layout_marginLeft">15dp</item>
+
+   		</style>
+        
+         <style name="styleInfoMulta" parent="@android:style/TextAppearance.Medium">
+		      <item name="android:layout_width">wrap_content</item>
+		      <item name="android:layout_height">wrap_content</item>
+			  <item name="android:textSize">15sp</item> 
+			  <item name="android:layout_marginRight">15dp</item>
+			  <item name="android:layout_marginLeft">15dp</item>
+			  <item name="android:layout_marginTop">5dp</item>
+
+   		</style>
+        
+        
+         <style name="styleNotaDetalle"
+		     parent="@android:style/TextAppearance.Medium">
+		      <item name="android:layout_width">match_parent</item>
+		       <item name="android:layout_height">wrap_content</item>
+		       
+		       <item name="android:padding">15dp</item>
+
+		       <item name="android:background">@color/azul_detalle</item>
+		       
+		       <item name="android:textColor">@color/colorBlanco</item>
+		       <item name="android:textColorHint">@color/colorBlanco</item>
+			   <item name="android:textSize">15sp</item> 
+
+
+			 <!-- 
+			 <item name="android:layout_marginRight">15dp</item>
+			 <item name="android:layout_marginLeft">15dp</item>
+			 
+			  --> 
+			  <item name="android:gravity">bottom</item> 
+			  <item name="android:layout_alignParentBottom">true</item> 
+			
+   		</style>
+        
+        
 </resources>
