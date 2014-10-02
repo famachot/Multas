@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/titulo_ubicacion"
+        style="@style/styleDetalleMulta"
+        android:layout_alignParentTop="true"
+        android:text="@string/titulo_ubicacion" />
+    
+    <TextView
+        android:id="@+id/ubicacion"
+        style="@style/styleInfoMulta"
+        android:layout_below="@+id/titulo_ubicacion"
+        android:text="@string/ubicacion" />
+    
+    <TextView
+        android:id="@+id/titulo_horario"
+        style="@style/styleDetalleMulta"
+        android:layout_below="@+id/ubicacion"
+        android:text="@string/titulo_horario" />
+
+    <TextView
+        android:id="@+id/horario"
+        style="@style/styleInfoMulta"
+        android:layout_below="@+id/titulo_horario"
+        android:text="@string/horario" />
+
+    <TextView
+        android:id="@+id/titutlo_tipo_cobro"
+        style="@style/styleDetalleMulta"
+        android:layout_below="@+id/horario"
+        android:text="@string/titulo_tipo_cobro" />
+
+
+    <TextView
+        android:id="@+id/cobro"
+		style="@style/styleInfoMulta"
+        android:layout_below="@+id/titutlo_tipo_cobro"
+        android:text="@string/tipo_cobro" />
+
+    <TextView
+        android:id="@+id/titulo_direccion"
+        style="@style/styleDetalleMulta"
+        android:layout_below="@+id/cobro"
+        android:text="@string/titulo_direccion" />
+
+    <TextView
+        android:id="@+id/direccion"
+        style="@style/styleInfoMulta"
+        android:layout_below="@+id/titulo_direccion"
+        android:text="@string/direccion" />
+
+    <Button
+        android:id="@+id/btn_llevame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/direccion"
+        android:layout_below="@+id/direccion"
+        android:layout_marginTop="16dp"
+        android:background="@color/azul_detalle"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/btn_llevame"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

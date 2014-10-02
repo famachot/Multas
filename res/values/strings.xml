@@ -70,6 +70,16 @@
     <string	name="donde_pagar">Donde Pagar</string>    
     <string	name="nota_costo_multa">Nota: El número de días dependera de la evaluación que haga el agente detransito sobre el castigo meritorio</string>
     
+    <string name="titulo_ubicacion">UBICACIÓN</string>
+    <string name="ubicacion">N/D</string>
+    <string name="titulo_horario">HORARIO</string>
+    <string name="horario">N/D</string>
+    <string name="titulo_tipo_cobro">TIPO DE COBRO</string>
+    <string name="tipo_cobro">Efectivo y Tarjeta de Credito</string>
+    <string name="titulo_direccion">DIRECCIÓN</string>
+    <string name="direccion">N/D</string>
+    <string name="nota_lugares_cobro">Nota: Para recoger su garantía tendrá que dirigirse al C.A.M. </string>
+    <string name="btn_llevame">¡Llevame!</string>
     
     
     
