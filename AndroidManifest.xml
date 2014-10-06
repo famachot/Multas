@@ -30,7 +30,7 @@
             android:label="Acerca de" 
             android:name=".AcercaDe" 
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.PueblaAyuntamiento.AcercaDe"  ></activity>
+            android:theme="@style/Theme.PueblaAyuntamiento.AcercaDe" ></activity>
         
     </application>
 
