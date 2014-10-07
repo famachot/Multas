@@ -471,7 +471,12 @@ public class AlertasDbAdapter {
 						mTipoMultas.setDescripcion(mCursor.getString(2));
 						mListTiposMulta.add(mTipoMultas);
 					}while(mCursor.moveToNext());
+				}else {
+					Log.d("debug1","No se le asigna null al array list");
+				mListTiposMulta = null;
 				}
+			}else {
+				
 			}
 			
 			//mCursor = mSQLiteDatabase.rawQuery("select * from TIPO_MULTAS", null);

@@ -7,7 +7,9 @@
     <ListView
         android:id="@+id/list_tiposDeMulta"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:divider="@color/azulAyuntamiento"
+		android:dividerHeight=".5px">
     </ListView>
 
 </LinearLayout>

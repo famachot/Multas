@@ -18,6 +18,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:contentDescription="@string/clear" />
 
         <TextView
@@ -26,7 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_toRightOf="@+id/icon"
+            android:layout_toEndOf="@+id/icon"
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -37,6 +40,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="8dp"
             android:background="@drawable/rectangle_counter"
@@ -53,8 +57,9 @@
             android:layout_width="8dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@android:color/black" />
+            android:background="@color/azul_detalle" />
     </RelativeLayout>
 
 

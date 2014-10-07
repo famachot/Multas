@@ -16,11 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class DireccionesAdapter extends BaseAdapter {
-	private ArrayList<Vector<String>> listDireccion; 
+	private ArrayList<String []> listDireccion; 
 	private Activity mActivity;
 	private ViewHolder holder;	
 	
-	public DireccionesAdapter (Activity mActivity,ArrayList<Vector<String>> listDireccion){
+	public DireccionesAdapter (Activity mActivity,ArrayList<String []> listDireccion){
 		this.mActivity = mActivity;
 		this.listDireccion = listDireccion; 
 	}
@@ -30,7 +30,7 @@ public View getView(int position, View convertView,ViewGroup parent){
 		
 		holder = null;
 		View view = convertView;
-		Vector<String> mDatos =  listDireccion.get(position);
+		String [] mDatos =  listDireccion.get(position);
 		
 		if(view == null) {
 			view = LayoutInflater.from(mActivity).inflate(R.layout.direcciones_pago, null);
@@ -54,19 +54,19 @@ public View getView(int position, View convertView,ViewGroup parent){
 		if (holder != null) {
 			if (holder.txt_ubicacion != null){
 				
-				holder.txt_ubicacion.setText(mDatos.elementAt(0));
+				holder.txt_ubicacion.setText(mDatos[0]);
 				//holder.Id_tipo.setTextSize(20);
 			}
 			
 			if (holder.txt_horario != null){
 				
-				holder.txt_horario.setText(mDatos.elementAt(1));
+				holder.txt_horario.setText(mDatos[1]);
 				//holder.Id_tipo.setTextSize(20);
 				//holder.infraccion.setText("Hola");
 			}
 			
 			if (holder.txt_direccion != null){
-				holder.txt_direccion.setText(mDatos.elementAt(2));
+				holder.txt_direccion.setText(mDatos[2]);
 				//holder.Id_tipo.setTextSize(20);
 			}
 			

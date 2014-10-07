@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 
 
+
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.objects.Multa;
 
@@ -21,8 +22,10 @@ import com.puebla.ayto.ti.multas.objects.Multa;
 
 
 
+
 import android.R.string;
 import android.app.Activity;
+import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +60,10 @@ public View getView(int position, View convertView,ViewGroup parent){
 			TextView infraccion = (TextView) view.findViewById(R.id.text_infraccion_frecuente);
 			TextView frecuente = (TextView) view.findViewById(R.id.text_incidencia);
 			TextView frecuente_id = (TextView) view.findViewById(R.id.text_num_incidencia);
+			TextView ver_mas = (TextView) view.findViewById(R.id.ver_mas);
 			ImageView icon_image = (ImageView) view.findViewById(R.id.img_item_frecuente);
-			view.setTag(new ViewHolder(icon_image, infraccion,frecuente,frecuente_id));
+			
+			view.setTag(new ViewHolder(icon_image, infraccion,frecuente,frecuente_id,ver_mas));
 		}
 		
 		if (holder == null && view != null) {
@@ -79,10 +84,24 @@ public View getView(int position, View convertView,ViewGroup parent){
 				if(mMulta.getMulta_id() == 26)
 					holder.infraccion.setText(R.string.item_26);
 					else 
-						if (mMulta.getMulta_id() == 6)
+						if (mMulta.getMulta_id() == 6) {
 							holder.infraccion.setText(R.string.item_6);
+							
+						}
+							
+				
 						else
-							holder.infraccion.setText(infraccion_text(mMulta.getMulta()));
+							if (infraccion_text(mMulta.getMulta())==true) {
+								holder.infraccion.setText(mMulta.getMulta().substring(0, 140));
+								//holder.ver_mas.setVisibility(View.VISIBLE);
+								holder.ver_mas.setText("ver más...");
+								
+							}else {
+								
+								holder.infraccion.setText(mMulta.getMulta());
+								holder.ver_mas.setText("ver detalle");
+							}
+							
 				//holder.Id_tipo.setTextSize(20);
 				//holder.infraccion.setText("Hola");
 			}
@@ -117,8 +136,8 @@ public View getView(int position, View convertView,ViewGroup parent){
 		return position;
 	}
 
-	private String infraccion_text(String txt) {
-		return (txt.length()> 250) ? txt.substring(0, 247) + "..." : txt;
+	private boolean infraccion_text(String txt) {
+		return (txt.length()> 140) ? true : false;
 	}
 	
 	private int id_icono_frecuente(int id) {
@@ -164,7 +183,7 @@ public View getView(int position, View convertView,ViewGroup parent){
 			icon_pk = R.drawable.frecuente_12;
 			break;
 		case 45:
-			icon_pk = R.drawable.frecuente_17;
+			icon_pk = R.drawable.frecuente_9;
 			break;
 		case 46:
 			icon_pk = R.drawable.frecuente_14;
@@ -193,11 +212,13 @@ public View getView(int position, View convertView,ViewGroup parent){
 		public final TextView infraccion;
 		public final TextView txt_frecuente;
 		public final TextView num_frecuencia;
-		public ViewHolder(ImageView icono_frecuente,TextView infraccion, TextView txt_frecuente,TextView num_frecuencia) {
+		public final TextView ver_mas;
+		public ViewHolder(ImageView icono_frecuente,TextView infraccion, TextView txt_frecuente,TextView num_frecuencia, TextView ver_mas) {
 			this.icono_frecuente = icono_frecuente;
 			this.infraccion = infraccion;
 			this.txt_frecuente = txt_frecuente;
 			this.num_frecuencia = num_frecuencia;
+			this.ver_mas = ver_mas;
 			
 		}
 	}

@@ -1,16 +1,18 @@
 package com.puebla.ayto.ti.multas.fragments;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.adapter.LasMasFrecuentesAdapter;
@@ -24,7 +26,7 @@ public class MasFrecuentesFragment extends Fragment {
 	private LasMasFrecuentesAdapter mAdaptadorMulta; 
 	private AlertasDbAdapter DB;
 	private Multa mMulta;
-	
+	private OnMultasSelectedListener mCallback;
 	
 	public MasFrecuentesFragment() {
 		// TODO Auto-generated constructor stub
@@ -38,40 +40,9 @@ public class MasFrecuentesFragment extends Fragment {
 		
 		DB.open();
 		ArrayList<Multa> mListaMulta = DB.buscaMultasFrecuentes(true);
-		//ArrayList<Multa> mListaMulta_cp = new ArrayList<Multa>();
+
 		DB.close();
-		//boolean elemento_26 = false;
-	//	boolean elemento_6 = false;
 
-		
-
-		/*
-		for(int x=0; x < mListaMulta.size(); x++) {
-			
-			if (mListaMulta.get(x).getMulta_id() == 26) {
-				if (elemento_26 == false) {
-					mListaMulta_cp.add(mListaMulta.get(x));
-					elemento_26 = true;
-				}
-			}else {
-				if (mListaMulta.get(x).getMulta_id() == 6) {
-					if (elemento_6 == false) {
-						mListaMulta_cp.add(mListaMulta.get(x));
-						elemento_6 = true;
-					}
-				}else {
-					mListaMulta_cp.add(mListaMulta.get(x));
-				}
-			}
-			
-			
-			
-			
-			
-			
-			
-			Log.d("Debug_Fragment", "Los datos almacenados en la BD son (Objetos) ID: " + mListaMulta.get(x).getId() + ", Infraccion -> " + mListaMulta.get(x).getMulta());
-		  }*/
 		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta);
 		// TODO Auto-generated method stub		
 		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
@@ -79,6 +50,17 @@ public class MasFrecuentesFragment extends Fragment {
 		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
 		
 		mListView.setAdapter(mAdaptadorMulta);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+            	    int position, long id) {
+            		
+            			  
+            	   Toast.makeText(getActivity(),"Click ListItem Number " + position, Toast.LENGTH_LONG).show();
+            	  }
+
+		});
+		
 		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
 		
 //		String info = (verificaDatosDB()) ? "Si funciono" : "jeje No funciono";
@@ -89,6 +71,38 @@ public class MasFrecuentesFragment extends Fragment {
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT ));		
 		return rootView;		
 	}
+	
+	
+	
+	 private class ListViewClickListener implements ListView.OnItemClickListener {
+	        @Override
+	        public void onItemClick(AdapterView<?> parent, View view, int posicao, long id) {          	        	
+		    	    	
+		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	    	
+		    		    	
+	        }
+	    }
+	 
+	 
+	// Interface de los metodos a implementar en la Activity
+	    public interface OnMultasSelectedListener {
+	        public void onMultaSelected(int position);
+	    }
+	    
+	    
+	    @Override
+	    public void onAttach(Activity activity) {
+	        super.onAttach(activity);
+	        
+	        // Nos aseguramos de que la actividad contenedora haya implementado la
+	        // interfaz de retrollamada. Si no, lanzamos una excepción
+	        try {
+	            mCallback = (OnMultasSelectedListener) activity;
+	        } catch (ClassCastException e) {
+	            throw new ClassCastException(activity.toString()
+	                    + " debe implementar OnMultasSelectedListener");
+	        }
+	    }
 	
 
 }

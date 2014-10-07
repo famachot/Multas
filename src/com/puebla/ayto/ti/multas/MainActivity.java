@@ -6,26 +6,12 @@ package com.puebla.ayto.ti.multas;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import fragments.LosMasComunes;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
-import com.puebla.ayto.ti.multas.fragments.*;
-
-import baseAdapterListView.NavigationAdapter;
-import br.liveo.utils.Constant;
-import br.liveo.utils.Menus;
 import navigationList.NavigationList;
-
-
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,10 +30,21 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import baseAdapterListView.NavigationAdapter;
+import br.liveo.utils.Constant;
+import br.liveo.utils.Menus;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
+import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment;
+import com.puebla.ayto.ti.multas.fragments.DireccionesFragment;
+import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment;
+import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment.OnMultasSelectedListener;
+import com.puebla.ayto.ti.multas.fragments.TiposDeMultaFragment;
 import com.puebla.ayto.ti.multas.objects.Multa;
 import com.puebla.ayto.ti.multas.objects.TiposDeMulta;
-import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
 
 import dataBase.AlertasDbAdapter;
 
@@ -56,7 +53,7 @@ import dataBase.AlertasDbAdapter;
 
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements OnMultasSelectedListener {
 
 	private int counterItemDownloads;
     private int lastPosition = 0;
@@ -132,7 +129,7 @@ public class MainActivity extends ActionBarActivity {
 		
 		//RecuperarTiposMulta();
 		
-		verificaTiposMultas();
+		MuestraMasFrecuentes();
 		}
 	
 	
@@ -270,7 +267,8 @@ private void setFragmentList(int position){
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
 			break;			
 		case 2:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();						
+
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new DireccionesFragment()).commit();						
 			break;				
 			
 		default:
@@ -324,13 +322,32 @@ private void setFragmentList(int position){
 	
 	
 	
-	
+	public void MuestraMasFrecuentes() {
+		DB = new AlertasDbAdapter(this);
+		
+		ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
+		//ArrayList<Multa> mListMultasFrecuentes = new ArrayList<Multa>();
+		
+		try {
+			DB.open();
+			mListaDeTipos = DB.buscaTiposDeMultasObjects();
+			if (mListaDeTipos == null) {
+				Toast.makeText(this, "Debe descrgar toda la información", Toast.LENGTH_LONG).show();
+				RecuperarTiposMulta();
+			}else {
+				
+			}
+		}catch(Exception e) {
+			
+		}
+		
+	}
 
 	  
 	  
 	  public boolean verificaTiposMultas() {
 		  DB = new AlertasDbAdapter(this);
-		  Cursor mCursor = null;
+		  
 		  ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
 		  ArrayList<Multa> mListMultas = new ArrayList<Multa>();
 		  ArrayList<Multa> mListMultasPOrTipo = new ArrayList<Multa>();
@@ -554,8 +571,10 @@ private void setFragmentList(int position){
     		
     		if (result != null){
     		ArrayList<Multa> mGetMultas = getMultas(result);
+    		FragmentManager fragmentManager = getSupportFragmentManager();
     			//mostrarDatos(mGetMultas, tipo);
     		    agregaMultas(mGetMultas);
+    		    fragmentManager.beginTransaction().replace(R.id.content_frame, new MasFrecuentesFragment()).commit();
     		}
     		else
     		{
@@ -604,7 +623,10 @@ private void setFragmentList(int position){
 	}
 	
 	
-	
+	public void onMultaSelected(int elemento) {
+		DetalleMultaFragment mDetalle = new DetalleMultaFragment();
+		Bundle args = new Bundle(); 
+	}
 	
 	
 }
