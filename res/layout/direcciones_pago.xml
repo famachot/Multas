@@ -19,6 +19,7 @@
         android:id="@+id/titulo_horario"
         style="@style/styleDetalleMulta"
         android:layout_below="@+id/ubicacion"
+        android:layout_marginTop="10dp"
         android:text="@string/titulo_horario" />
 
     <TextView
@@ -31,6 +32,7 @@
         android:id="@+id/titulo_direccion"
         style="@style/styleDetalleMulta"
         android:layout_below="@+id/horario"
+        android:layout_marginTop="10dp"
         android:text="@string/titulo_direccion" />
 
     <TextView

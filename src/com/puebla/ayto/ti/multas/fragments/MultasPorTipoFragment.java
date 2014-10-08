@@ -11,7 +11,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ListView;
 
 import com.puebla.ayto.ti.multas.R;
-
 import com.puebla.ayto.ti.multas.adapter.MultasPorTipoAdapter;
 import com.puebla.ayto.ti.multas.objects.Multa;
 
@@ -20,18 +19,34 @@ import dataBase.AlertasDbAdapter;
 public class MultasPorTipoFragment extends Fragment{
 	private AlertasDbAdapter DB;
 	private MultasPorTipoAdapter mAdaptador;
+	ArrayList<Multa> mListaMulta;
 	
+	 public MultasPorTipoFragment() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	 public static MultasPorTipoFragment newInstance(Bundle arguments){
+		 MultasPorTipoFragment f = new MultasPorTipoFragment();
+	        if(arguments != null){
+	            f.setArguments(arguments);
+	        }
+	        return f;
+	    }
+	 
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
 		DB = new AlertasDbAdapter(getActivity());
-		
+		if (getArguments() != null) {
 		DB.open();
-		ArrayList<Multa> mListaMulta = DB.RetornaMultasPorTipo(2);
+		 mListaMulta = DB.RetornaMultasPorTipo(getArguments().getInt("id"));
 
-		DB.close();
+		DB.close();	
+		}else {mListaMulta = null;}
+		
+		
 
 			
 			

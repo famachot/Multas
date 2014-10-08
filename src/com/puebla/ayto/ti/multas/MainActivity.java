@@ -44,7 +44,9 @@ import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment.MuestraDetalleFr
 import com.puebla.ayto.ti.multas.fragments.DireccionesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment.OnMultasSelectedListener;
+import com.puebla.ayto.ti.multas.fragments.MultasPorTipoFragment;
 import com.puebla.ayto.ti.multas.fragments.TiposDeMultaFragment;
+import com.puebla.ayto.ti.multas.fragments.TiposDeMultaFragment.MultasPorTipoInter;
 import com.puebla.ayto.ti.multas.objects.Multa;
 import com.puebla.ayto.ti.multas.objects.TiposDeMulta;
 
@@ -55,7 +57,9 @@ import dataBase.AlertasDbAdapter;
 
 
 
-public class MainActivity extends ActionBarActivity implements OnMultasSelectedListener, MuestraDetalleFragment {
+public class MainActivity extends ActionBarActivity 
+implements OnMultasSelectedListener, MuestraDetalleFragment,
+MultasPorTipoInter{
 
 	private int counterItemDownloads;
     private int lastPosition = 0;
@@ -667,6 +671,20 @@ private void setFragmentList(int position){
 		
 	}
 	
+	public void TipoSeleccionado(int id) {
+		Bundle args = new Bundle(); 
+		args.putInt("id", id);
+
+		MultasPorTipoFragment mDetalleFragment =  MultasPorTipoFragment.newInstance(args);
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+		//FragmentTransaction ft = getFragmentManager().beginTransaction();
+		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
+        ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
+        ft.addToBackStack(null);
+        ft.commit();
+	}
 	
 }
 

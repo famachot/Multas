@@ -31,7 +31,7 @@ public class DireccionesFragment extends Fragment {
 		mDireccionesList.add(new String[] {"Amalucán","Lun a Vier - 8:00 a 15:00 hrs.","And. de las Torres No. 18 Amalucán"});
 		mDireccionesList.add(new String[] {"Panteón Municipal","Lun a Vier - 8:00 a 15:00 hrs. ","11 Sur y 35 Pte."});
 		mDireccionesList.add(new String[] {"Obras Públicas","Lun a Vier - 8:00 a 15:00 hrs.","Prolongación Reforma 3308 Col. Amor"});
-		mDireccionesList.add(new String[] {"C.A.M","Lun a Vier - 8:00 a 20:00 hrs.","4 Poniente Esq. 11 norte"});
+		mDireccionesList.add(new String[] {"C.A.M*","Lun a Vier - 8:00 a 20:00 hrs.","4 Poniente Esq. 11 norte"});
 		mDireccionesList.add(new String[] {"Plaza Molino del Cristo","Lun a Vier - 8:00 a 14:00 hrs. ","Blvd. Vicente Suarez No. 1011-A Esq. Av. 14 Ote. Col. El Cristo(Local 27)"});
 		mDireccionesList.add(new String[] {"Comercio informal ","Lun a Vier - 8:00 a 14:00 hrs.","3 Poniente 116 Colonia Centro"});
 		mDireccionesList.add(new String[] {"Sindicatura","Lun a Vier - 8:00 a 14:00 hrs.","4 Poniente No. 604 Colonia Centro"});
@@ -39,9 +39,9 @@ public class DireccionesFragment extends Fragment {
 		
 		mAdaptador = new DireccionesAdapter(getActivity(), mDireccionesList);
 		
-		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
+		View rootView = inflater.inflate(R.layout.lugares_de_pago_list, container, false);
 		
-		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
+		ListView mListView = (ListView) rootView.findViewById(R.id.list_lugares_pago);
 		
 		mListView.setAdapter(mAdaptador);
 		

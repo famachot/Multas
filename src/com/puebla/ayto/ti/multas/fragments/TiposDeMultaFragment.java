@@ -7,6 +7,7 @@ package com.puebla.ayto.ti.multas.fragments;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,11 @@ import com.google.gson.reflect.TypeToken;
 
 
 
+
+
 import dataBase.AlertasDbAdapter;
+
+
 
 
 
@@ -37,6 +43,7 @@ import dataBase.AlertasDbAdapter;
 
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.adapter.*;
+import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment.MuestraDetalleFragment;
 import com.puebla.ayto.ti.multas.objects.*;
 
 public class TiposDeMultaFragment extends Fragment {
@@ -47,10 +54,12 @@ public class TiposDeMultaFragment extends Fragment {
 	private static final String TAG_DEBUG ="TAG_DEBUG";
 	private static final String TAG_RECUPERAR_DATOS ="TAG_RECUPERAR_DATOS";
 	
-	
+	MultasPorTipoInter mCallBack;
 	private AdapterElementos mAdaptadorTipo; 
 	private AlertasDbAdapter DB;
-	private TiposDeMulta mListaTipos;
+	
+	ArrayList<TiposDeMulta> mListaTipos;
+	
 	
 	//private TextView txtFragmentDownload;
 	private boolean searchCheck;
@@ -61,7 +70,7 @@ public class TiposDeMultaFragment extends Fragment {
 		DB = new AlertasDbAdapter(getActivity());
 		
 		DB.open();
-		ArrayList<TiposDeMulta> mListaTipos = DB.buscaTiposDeMultasObjects();
+		 mListaTipos = DB.buscaTiposDeMultasObjects();
 		DB.close();
 		
 		mAdaptadorTipo = new AdapterElementos(getActivity(), mListaTipos);
@@ -71,6 +80,7 @@ public class TiposDeMultaFragment extends Fragment {
 		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
 		
 		mListView.setAdapter(mAdaptadorTipo);
+		mListView.setOnItemClickListener(new ListViewClickListener());
 		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
 		
 //		String info = (verificaDatosDB()) ? "Si funciono" : "jeje No funciono";
@@ -83,36 +93,41 @@ public class TiposDeMultaFragment extends Fragment {
 	}
 	
 	
+	
+	 private class ListViewClickListener implements ListView.OnItemClickListener {
+	        @Override
+	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
+		    	    	
+		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
+		    	TiposDeMulta mTipos = mListaTipos.get(posision);
+		    	mCallBack.TipoSeleccionado(mTipos.getId());
+		    		    	
+	        }
+	    }
 
-	
-	
-
-	
-	
-	
-
-	
-
-	
-	
-	
-
-
-	
-	
-	
-	
-	
-
+	/**
+	 * Sección para la Interfaz 
+	 * 
+	 */
     
-	
-	
-	
+	public interface MultasPorTipoInter {
+		 public void TipoSeleccionado(int id);
+		 
+	 }
 
-    
-    
-
-    
+	 @Override
+	    public void onAttach(Activity activity) {
+	        super.onAttach(activity);
+	        
+	        // Nos aseguramos de que la actividad contenedora haya implementado la
+	        // interfaz de retrollamada. Si no, lanzamos una excepción
+	        try {
+	        	mCallBack = (MultasPorTipoInter) activity;
+	        } catch (ClassCastException e) {
+	            throw new ClassCastException(activity.toString()
+	                    + " debe implementar OnMultasSelectedListener");
+	        }
+	    }
     
 
 }
