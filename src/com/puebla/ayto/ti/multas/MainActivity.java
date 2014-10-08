@@ -45,6 +45,7 @@ import com.puebla.ayto.ti.multas.fragments.DireccionesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment.OnMultasSelectedListener;
 import com.puebla.ayto.ti.multas.fragments.MultasPorTipoFragment;
+import com.puebla.ayto.ti.multas.fragments.MultasPorTipoFragment.OnMultasSelectedTipo;
 import com.puebla.ayto.ti.multas.fragments.TiposDeMultaFragment;
 import com.puebla.ayto.ti.multas.fragments.TiposDeMultaFragment.MultasPorTipoInter;
 import com.puebla.ayto.ti.multas.objects.Multa;
@@ -59,7 +60,7 @@ import dataBase.AlertasDbAdapter;
 
 public class MainActivity extends ActionBarActivity 
 implements OnMultasSelectedListener, MuestraDetalleFragment,
-MultasPorTipoInter{
+MultasPorTipoInter, OnMultasSelectedTipo{
 
 	private int counterItemDownloads;
     private int lastPosition = 0;
@@ -658,6 +659,33 @@ private void setFragmentList(int position){
         ft.commit();
 		
 	}
+	
+	
+	
+public void onMultaSelectedTipo(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa) {
+		
+		Bundle args = new Bundle(); 
+		
+		args.putInt("id", id);
+		args.putString("infraccion", infraccion);
+		args.putString("fundamento", fundamento);
+		args.putInt("ran_ini", ran_ini);
+		args.putInt("ran_fin", ran_fin);
+		args.putBoolean("frecuente", frecuente);
+		args.putInt("num_multa", (frecuente) ? num_multa : -1);
+		
+		DetalleMultaFragment mDetalleFragment =  DetalleMultaFragment.newInstance(args);
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+		//FragmentTransaction ft = getFragmentManager().beginTransaction();
+		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
+        ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
+        ft.addToBackStack(null);
+        ft.commit();
+		
+	}
+	
 	
 	
 	public void dondePagar() {
