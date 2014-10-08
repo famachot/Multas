@@ -323,7 +323,7 @@ private void setFragmentList(int position){
 	
 	
 	public void MuestraMasFrecuentes() {
-		DB = new AlertasDbAdapter(this);
+		 
 		
 		ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
 		//ArrayList<Multa> mListMultasFrecuentes = new ArrayList<Multa>();
