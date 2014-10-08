@@ -29,6 +29,7 @@
                     android:layout_width="?android:attr/listPreferredItemHeight"
                     android:layout_height="?android:attr/listPreferredItemHeight"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="15dp"
@@ -42,6 +43,7 @@
                     android:id="@+id/text_titulo_infraccion"
                     style="@style/styleDetalleMulta"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     android:text="@string/titulo_infraccion" />
                 
@@ -105,7 +107,7 @@
                 android:text="@string/precio" />
 
             <Button
-                android:id="@+id/btn_llevame"
+                android:id="@+id/btn_donde_pagar"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

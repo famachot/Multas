@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -39,6 +40,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment;
+import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment.MuestraDetalleFragment;
 import com.puebla.ayto.ti.multas.fragments.DireccionesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment.OnMultasSelectedListener;
@@ -53,7 +55,7 @@ import dataBase.AlertasDbAdapter;
 
 
 
-public class MainActivity extends ActionBarActivity implements OnMultasSelectedListener {
+public class MainActivity extends ActionBarActivity implements OnMultasSelectedListener, MuestraDetalleFragment {
 
 	private int counterItemDownloads;
     private int lastPosition = 0;
@@ -267,8 +269,7 @@ private void setFragmentList(int position){
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
 			break;			
 		case 2:			
-
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new DireccionesFragment()).commit();						
+			fragmentManager.beginTransaction().replace(R.id.content_frame, new DetalleMultaFragment()).commit();						
 			break;				
 			
 		default:
@@ -323,7 +324,7 @@ private void setFragmentList(int position){
 	
 	
 	public void MuestraMasFrecuentes() {
-		 
+		DB = new AlertasDbAdapter(this);
 		
 		ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
 		//ArrayList<Multa> mListMultasFrecuentes = new ArrayList<Multa>();
@@ -621,12 +622,51 @@ private void setFragmentList(int position){
 		}
 		 return listMultas;
 	}
+    
+    
+    /***
+     * 	Sección que se utiliza para las llamadas a los fragments y el paso de parametros entre ellos
+     * 
+     *  
+     */
 	
 	
-	public void onMultaSelected(int elemento) {
-		DetalleMultaFragment mDetalle = new DetalleMultaFragment();
+	public void onMultaSelected(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa) {
+		
 		Bundle args = new Bundle(); 
+		
+		args.putInt("id", id);
+		args.putString("infraccion", infraccion);
+		args.putString("fundamento", fundamento);
+		args.putInt("ran_ini", ran_ini);
+		args.putInt("ran_fin", ran_fin);
+		args.putBoolean("frecuente", frecuente);
+		args.putInt("num_multa", (frecuente) ? num_multa : -1);
+		
+		DetalleMultaFragment mDetalleFragment =  DetalleMultaFragment.newInstance(args);
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+		//FragmentTransaction ft = getFragmentManager().beginTransaction();
+		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
+        ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
+        ft.addToBackStack(null);
+        ft.commit();
+		
+	}
+	
+	
+	public void dondePagar() {
+		//FragmentManager fragmentManager = getSupportFragmentManager();	
+		
+		DireccionesFragment mFt = new DireccionesFragment();
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.content_frame, mFt, "TAG_FRAGMENT");
+        ft.addToBackStack(null);
+        ft.commit();
+		
 	}
 	
 	
 }
+

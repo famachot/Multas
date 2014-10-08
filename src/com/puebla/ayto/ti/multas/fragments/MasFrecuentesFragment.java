@@ -27,9 +27,15 @@ public class MasFrecuentesFragment extends Fragment {
 	private AlertasDbAdapter DB;
 	private Multa mMulta;
 	private OnMultasSelectedListener mCallback;
+	ArrayList<Multa> mListaMulta;
+	
+	private int position;
 	
 	public MasFrecuentesFragment() {
 		// TODO Auto-generated constructor stub
+	}
+	public MasFrecuentesFragment(int position) {
+		this.position = position;
 	}
 	
 	@Override
@@ -39,7 +45,7 @@ public class MasFrecuentesFragment extends Fragment {
 		DB = new AlertasDbAdapter(getActivity());
 		
 		DB.open();
-		ArrayList<Multa> mListaMulta = DB.buscaMultasFrecuentes(true);
+		 mListaMulta = DB.buscaMultasFrecuentes(true);
 
 		DB.close();
 
@@ -50,16 +56,7 @@ public class MasFrecuentesFragment extends Fragment {
 		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
 		
 		mListView.setAdapter(mAdaptadorMulta);
-		mListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-            	    int position, long id) {
-            		
-            			  
-            	   Toast.makeText(getActivity(),"Click ListItem Number " + position, Toast.LENGTH_LONG).show();
-            	  }
-
-		});
+		mListView.setOnItemClickListener(new ListViewClickListener() );
 		
 		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
 		
@@ -76,9 +73,14 @@ public class MasFrecuentesFragment extends Fragment {
 	
 	 private class ListViewClickListener implements ListView.OnItemClickListener {
 	        @Override
-	        public void onItemClick(AdapterView<?> parent, View view, int posicao, long id) {          	        	
+	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
 		    	    	
-		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	    	
+		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
+		    	Multa mMultaDatos = mListaMulta.get(posision);
+		    	mCallback.onMultaSelected(mMultaDatos.getId() , mMultaDatos.getMulta(),
+		    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),
+		    			mMultaDatos.getRango_importe_fin(), mMultaDatos.getFrecuente(), 
+		    			mMultaDatos.getMulta_id());
 		    		    	
 	        }
 	    }
@@ -86,7 +88,8 @@ public class MasFrecuentesFragment extends Fragment {
 	 
 	// Interface de los metodos a implementar en la Activity
 	    public interface OnMultasSelectedListener {
-	        public void onMultaSelected(int position);
+	    	
+	        public void onMultaSelected(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa);
 	    }
 	    
 	    
