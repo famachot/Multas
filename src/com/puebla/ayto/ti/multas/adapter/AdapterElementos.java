@@ -1,7 +1,7 @@
 package com.puebla.ayto.ti.multas.adapter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -21,7 +19,7 @@ import com.puebla.ayto.ti.multas.R;
 public class AdapterElementos extends BaseAdapter {
 
 	private ViewHolder holder;	
-	private HashSet<Integer> checkedItems;
+	
 	private Activity mActivity;
 	private ArrayList<TiposDeMulta> listaTipos;
 	

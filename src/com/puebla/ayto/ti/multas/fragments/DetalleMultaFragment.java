@@ -8,19 +8,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.textservice.TextInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.puebla.ayto.ti.multas.R;
-import com.puebla.ayto.ti.multas.objects.Multa;
+
 
 public class DetalleMultaFragment extends Fragment {
 	
 	
 	MuestraDetalleFragment mCallBack;
 	public static final String TAG = "DetalleFragment";
-	private Multa mMulta;
+	
 	private static final double salario = 63.77;
 	
 	TextView text_Infraccion;
@@ -28,6 +29,12 @@ public class DetalleMultaFragment extends Fragment {
 	TextView text_DiasMulta;
 	TextView text_CostoSalario;
 	TextView text_PrecioRango;
+	
+	TextView titulo_salario;
+	
+	TextView titulo_rangoCostos;
+	TextView nota_info;
+	
 	ImageView mFoto;
 	View mLineaDiv;
 	Button btn_donde_pagar;
@@ -59,6 +66,11 @@ public class DetalleMultaFragment extends Fragment {
 		 mFoto = (ImageView) rootView.findViewById(R.id.imageView1);
 		 mLineaDiv = (View) rootView.findViewById(R.id.linea_divisora);
 		 btn_donde_pagar = (Button) rootView.findViewById(R.id.btn_donde_pagar);
+		 
+		 titulo_salario = (TextView) rootView.findViewById(R.id.titulo_salario);
+		 titulo_rangoCostos = (TextView) rootView.findViewById(R.id.titulo_rango_costos);
+		 nota_info = (TextView) rootView.findViewById(R.id.nota_multa);
+		
 		
 		return rootView;
 	}
@@ -74,8 +86,30 @@ public class DetalleMultaFragment extends Fragment {
 	        	
 	        	text_Infraccion.setText(getArguments().getString("infraccion"));
 		        text_Fundamento.setText(getArguments().getString("fundamento"));
-		        text_DiasMulta.setText("De " + Integer.toString(getArguments().getInt("ran_ini"))   + " a " + Integer.toString(getArguments().getInt("ran_fin"))  + " días");
-		        text_PrecioRango.setText("Minimo $" + costo_inicial + " Máximo $" + costo_final);
+		        
+		        String dias_multas;
+		        if(getArguments().getInt("ran_ini") == 0 && getArguments().getInt("ran_fin") == 0) {
+		        	 dias_multas = "Amonestación";
+		        	 titulo_salario.setVisibility(View.GONE);
+		        	 text_CostoSalario.setVisibility(View.GONE);
+		        	 titulo_rangoCostos.setVisibility(View.GONE);
+		        	 text_PrecioRango.setVisibility(View.GONE);
+		        	 btn_donde_pagar.setVisibility(View.GONE);
+		        	 nota_info.setText("Nota: N/D");
+		        	 
+		        }else if (getArguments().getInt("ran_fin") == 0) {
+		        	 dias_multas = Integer.toString(getArguments().getInt("ran_ini")) + " días";
+		        	 text_PrecioRango.setText("Costo $" + costo_inicial);
+		        }else {
+		        	 dias_multas = "De " + Integer.toString(getArguments().getInt("ran_ini"))   + " a " + Integer.toString(getArguments().getInt("ran_fin"))  + " días";
+		        	 text_PrecioRango.setText("Minimo $" + costo_inicial + " Máximo $" + costo_final);
+		        }
+		        
+		   
+		        text_DiasMulta.setText(dias_multas);
+		        
+		        
+		       
 		        text_CostoSalario.setText(Double.toString(salario));
 		        if (getArguments().getBoolean("frecuente")) {
 		        	mFoto.setImageResource(id_icono_frecuente(getArguments().getInt("num_multa")));

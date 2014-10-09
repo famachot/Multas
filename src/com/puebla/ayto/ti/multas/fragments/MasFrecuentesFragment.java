@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.adapter.LasMasFrecuentesAdapter;
@@ -25,19 +25,16 @@ public class MasFrecuentesFragment extends Fragment {
 
 	private LasMasFrecuentesAdapter mAdaptadorMulta; 
 	private AlertasDbAdapter DB;
-	private Multa mMulta;
+
 	private OnMultasSelectedListener mCallback;
 	ArrayList<Multa> mListaMulta;
 	
-	private int position;
+	
 	
 	public MasFrecuentesFragment() {
 		// TODO Auto-generated constructor stub
 	}
-	public MasFrecuentesFragment(int position) {
-		this.position = position;
-	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -75,12 +72,14 @@ public class MasFrecuentesFragment extends Fragment {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
 		    	    	
-		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
+		    	//Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
 		    	Multa mMultaDatos = mListaMulta.get(posision);
 		    	mCallback.onMultaSelected(mMultaDatos.getId() , mMultaDatos.getMulta(),
 		    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),
 		    			mMultaDatos.getRango_importe_fin(), mMultaDatos.getFrecuente(), 
 		    			mMultaDatos.getMulta_id());
+		    	
+		    	
 		    		    	
 	        }
 	    }
