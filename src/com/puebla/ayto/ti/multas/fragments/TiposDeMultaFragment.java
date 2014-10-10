@@ -98,7 +98,7 @@ public class TiposDeMultaFragment extends Fragment {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
 		    	    	
-		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
+		    //	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
 		    	TiposDeMulta mTipos = mListaTipos.get(posision);
 		    	mCallBack.TipoSeleccionado(mTipos.getId());
 		    		    	
