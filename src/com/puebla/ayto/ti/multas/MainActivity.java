@@ -54,10 +54,6 @@ import com.puebla.ayto.ti.multas.objects.TiposDeMulta;
 import dataBase.AlertasDbAdapter;
 
 
-
-
-
-
 public class MainActivity extends ActionBarActivity 
 implements OnMultasSelectedListener, MuestraDetalleFragment,
 MultasPorTipoInter, OnMultasSelectedTipo{
@@ -673,6 +669,9 @@ public void onMultaSelectedTipo(int id, String infraccion, String fundamento, in
 		args.putInt("ran_fin", ran_fin);
 		args.putBoolean("frecuente", frecuente);
 		args.putInt("num_multa", (frecuente) ? num_multa : -1);
+		
+		
+		
 		
 		DetalleMultaFragment mDetalleFragment =  DetalleMultaFragment.newInstance(args);
 		

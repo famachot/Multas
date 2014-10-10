@@ -2,17 +2,19 @@ package com.puebla.ayto.ti.multas.adapter;
 
 import java.util.ArrayList;
 
-import com.puebla.ayto.ti.multas.R;
-import com.puebla.ayto.ti.multas.adapter.LasMasFrecuentesAdapter.ViewHolder;
-import com.puebla.ayto.ti.multas.objects.Multa;
+
 
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.puebla.ayto.ti.multas.R;
+import com.puebla.ayto.ti.multas.objects.Multa;
+
+import android.util.Log;
 
 public class MultasPorTipoAdapter extends BaseAdapter {
 
@@ -20,6 +22,8 @@ public class MultasPorTipoAdapter extends BaseAdapter {
 
 	private Activity mActivity;
 	private ArrayList<Multa> listaMulta;
+	
+	final String TAG_ADAPTER = "TAG_ADAPTER";
 	
 	public MultasPorTipoAdapter (Activity mActivity, ArrayList<Multa> listaMulta){
 		this.mActivity = mActivity;
@@ -34,6 +38,9 @@ public View getView(int position, View convertView,ViewGroup parent){
 		holder = null;
 		View view = convertView;
 		final Multa mMulta = listaMulta.get(position);
+		
+	
+		Log.d(TAG_ADAPTER, "La posisión es :" + Integer.toString(position));
 		
 		if(view == null) {
 			view = LayoutInflater.from(mActivity).inflate(R.layout.item_multa_tipo, null);
@@ -52,8 +59,9 @@ public View getView(int position, View convertView,ViewGroup parent){
 
 		if (holder != null) {
 		
+			Log.d(TAG_ADAPTER, "Es frecuente: " + mMulta.getFrecuente() + ", Numero de frecuencia: " + Integer.toString(mMulta.getFrecuencia()));
 			
-			if (holder.infraccion != null){
+			
 				if(mMulta.getMulta_id() == 26)
 					holder.infraccion.setText(R.string.item_26);
 					else 
@@ -64,12 +72,13 @@ public View getView(int position, View convertView,ViewGroup parent){
 								holder.infraccion.setText(R.string.item_87);
 							else
 								holder.infraccion.setText(infraccion_text(mMulta.getMulta()));
-			}
 			
-			if(verificaFrecuente(mMulta.getMulta_id())){
-				if (holder.txt_frecuente != null){
-					holder.txt_frecuente.setText( "Frecuente: " + Integer.toString(mMulta.getFrecuencia()));
+			
+			if(verificaFrecuente(mMulta.getFrecuencia())){
+				holder.txt_frecuente.setText( "Frecuente: " + Integer.toString(mMulta.getFrecuencia()));
 					holder.txt_frecuente.setVisibility(View.VISIBLE);
+				if (holder.txt_frecuente != null){
+					
 					
 				}
 			}	

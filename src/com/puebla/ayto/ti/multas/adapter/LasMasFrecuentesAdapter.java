@@ -23,9 +23,9 @@ import com.puebla.ayto.ti.multas.objects.Multa;
 
 
 
-import android.R.string;
+
 import android.app.Activity;
-import android.opengl.Visibility;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

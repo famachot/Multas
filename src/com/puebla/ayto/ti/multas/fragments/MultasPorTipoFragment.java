@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.widget.Toast;
 
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.adapter.MultasPorTipoAdapter;
-import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment.OnMultasSelectedListener;
 import com.puebla.ayto.ti.multas.objects.Multa;
 
 import dataBase.AlertasDbAdapter;
@@ -26,6 +26,8 @@ public class MultasPorTipoFragment extends Fragment{
 	ArrayList<Multa> mListaMulta;
 	
 	OnMultasSelectedTipo mCallback;
+	
+	final String TAG_FRECUENTES = "TAG_FRECUENTES";
 	
 	 public MultasPorTipoFragment() {
 		// TODO Auto-generated constructor stub
@@ -52,6 +54,13 @@ public class MultasPorTipoFragment extends Fragment{
 		DB.close();	
 		}else {mListaMulta = null;}
 		
+		
+		
+		for (int x = 0; x < mListaMulta.size(); x++) {
+			
+			Log.d(TAG_FRECUENTES, "Multa: " + mListaMulta.get(x).getMulta().substring(0, 20) + ", Frecuente: " +  mListaMulta.get(x).getFrecuente() + 
+					",  Multa_id: " + mListaMulta.get(x).getMulta_id());
+		}
 		
 
 			

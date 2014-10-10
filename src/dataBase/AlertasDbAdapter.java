@@ -26,7 +26,7 @@ public class AlertasDbAdapter {
 	private DataBaseHelper mDataBaseHelper;
 	private SQLiteDatabase mSQLiteDatabase;
 	
-	private static final String TAG_DB = "ClassDataBase";
+	
 	
 	private static final String verificandoDb = "verificandoDb";
 	
@@ -79,9 +79,6 @@ public class AlertasDbAdapter {
 	
 
 	
-	private static final String DROP_TABLE_NOTIFICACIONES = "DROP TABLE IF EXISTS " + EsquemaMultas.TABLE_NAME;
-	
-	private static final String DROP_TABLE_AVISOS = "DROP TABLE IF EXISTS " + EsquemaTipos.TABLE_NAME;
 	
 	
 
@@ -383,7 +380,7 @@ public class AlertasDbAdapter {
 			if(mCursor.moveToFirst()) {
 				do {
 				
-					Log.d("DB", "Entro en el ciclo do while ");
+					
 
 					Multa mMulta = new Multa();
 					mMulta.setId(mCursor.getInt(0));
@@ -394,7 +391,10 @@ public class AlertasDbAdapter {
 					mMulta.setFundamento(mCursor.getString(5));
 					mMulta.setTipo(mCursor.getInt(6));
 					mMulta.setFrecuecia(mCursor.getInt(7));
-					//mMulta.setFrecuente(frecuente);	
+					Log.d(DataBaseName, "Multa: " + mCursor.getString(2) + ", Es frecuente " + mCursor.getString(8));
+					mMulta.setFrecuente((mCursor.getString(8).equals("1")) ? true : false);
+					
+					
 					
 					
 					if (mCursor.getInt(1) == 26) {
