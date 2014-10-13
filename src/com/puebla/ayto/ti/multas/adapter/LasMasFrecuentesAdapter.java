@@ -2,36 +2,16 @@ package com.puebla.ayto.ti.multas.adapter;
 
 import java.util.ArrayList;
 
-
-
-
-
-
-
-
-
-
-
-import com.puebla.ayto.ti.multas.R;
-import com.puebla.ayto.ti.multas.objects.Multa;
-
-
-
-
-
-
-
-
-
-
 import android.app.Activity;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.puebla.ayto.ti.multas.R;
+import com.puebla.ayto.ti.multas.objects.Multa;
 
 public class LasMasFrecuentesAdapter extends BaseAdapter {
 	
@@ -74,6 +54,9 @@ public View getView(int position, View convertView,ViewGroup parent){
 		}
 
 		if (holder != null) {
+			
+			 
+			
 			if (holder.icono_frecuente != null){
 				
 				holder.icono_frecuente.setImageResource(id_icono_frecuente(mMulta.getMulta_id()));

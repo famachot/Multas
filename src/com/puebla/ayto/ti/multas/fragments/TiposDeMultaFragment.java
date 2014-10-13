@@ -65,9 +65,9 @@ public class TiposDeMultaFragment extends Fragment {
 		
 		mAdaptadorTipo = new AdapterElementos(getActivity(), mListaTipos);
 		// TODO Auto-generated method stub		
-		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
+		View rootView = inflater.inflate(R.layout.tipos_de_multa_fragment, container, false);
 		
-		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
+		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMultaFragment);
 		
 		mListView.setAdapter(mAdaptadorTipo);
 		mListView.setOnItemClickListener(new ListViewClickListener());

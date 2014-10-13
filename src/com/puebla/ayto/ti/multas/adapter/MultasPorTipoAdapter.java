@@ -62,26 +62,29 @@ public View getView(int position, View convertView,ViewGroup parent){
 			Log.d(TAG_ADAPTER, "Es frecuente: " + mMulta.getFrecuente() + ", Numero de frecuencia: " + Integer.toString(mMulta.getFrecuencia()));
 			
 			
-				if(mMulta.getMulta_id() == 26)
+				if(mMulta.getMulta_id() == 26) {
 					holder.infraccion.setText(R.string.item_26);
-					else 
+					holder.txt_frecuente.setText( "Frecuente: " + Integer.toString(mMulta.getFrecuencia()));
+					holder.txt_frecuente.setVisibility(View.VISIBLE);
+				}
+					else {
 						if (mMulta.getMulta_id() == 6)
+						{
 							holder.infraccion.setText(R.string.item_6);
+							holder.txt_frecuente.setText( "Frecuente: " + Integer.toString(mMulta.getFrecuencia()));
+							holder.txt_frecuente.setVisibility(View.VISIBLE);
+						}
 						else
 							if (mMulta.getMulta_id() == 87)
 								holder.infraccion.setText(R.string.item_87);
+								//holder.infraccion.setText("este es el que no funcinaba **");
 							else
 								holder.infraccion.setText(infraccion_text(mMulta.getMulta()));
+					} 
+						
 			
 			
-			if(verificaFrecuente(mMulta.getFrecuencia())){
-				holder.txt_frecuente.setText( "Frecuente: " + Integer.toString(mMulta.getFrecuencia()));
-					holder.txt_frecuente.setVisibility(View.VISIBLE);
-				if (holder.txt_frecuente != null){
-					
-					
-				}
-			}	
+				
 		}
 		return view;
 	}

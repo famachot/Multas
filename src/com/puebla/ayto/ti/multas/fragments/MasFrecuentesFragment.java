@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-
 import android.widget.ListView;
-
 
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.adapter.LasMasFrecuentesAdapter;
@@ -29,6 +28,7 @@ public class MasFrecuentesFragment extends Fragment {
 	private OnMultasSelectedListener mCallback;
 	ArrayList<Multa> mListaMulta;
 	
+	private static final String TAG_Fragment = "TAG_Fragment";
 	
 	
 	public MasFrecuentesFragment() {
@@ -45,6 +45,7 @@ public class MasFrecuentesFragment extends Fragment {
 		 mListaMulta = DB.buscaMultasFrecuentes(true);
 
 		DB.close();
+	
 
 		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta);
 		// TODO Auto-generated method stub		

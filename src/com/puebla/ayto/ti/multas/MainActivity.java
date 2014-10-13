@@ -262,12 +262,49 @@ private void setFragmentList(int position){
 		
 		FragmentManager fragmentManager = getSupportFragmentManager();							
 		
+		
+/**
+ * 
+ * MultasPorTipoFragment mDetalleFragment =  MultasPorTipoFragment.newInstance(args);
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+		
+		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
+        ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
+        ft.addToBackStack(null);
+        ft.commit();
+ * 
+ * */
+		//TiposDeMultaFragment FragmentPorTipo = new TiposDeMultaFragment();
+		
+		//FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		//FragmentTransaction ft = getFragmentManager().beginTransaction();
+		
 		switch (position) {
 		case 0:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new MasFrecuentesFragment()).commit();
+			//fragmentManager.beginTransaction().replace(R.id.content_frame, new MasFrecuentesFragment().commit();
+			MasFrecuentesFragment principalFragment = new MasFrecuentesFragment();
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			ft.replace(R.id.content_frame, principalFragment, "TAG_FRAGMENT");
+			ft.disallowAddToBackStack();
+			ft.commit();
+			
+
+			
 			break;					
 		case 1:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
+			//fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).addToBackStack(null).commit();
+			//TiposDeMultaFragment FragmentPorTipo = new TiposDeMultaFragment();
+		///	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			//ft.remove(null).add( R.id.content_frame, FragmentPorTipo,"").addToBackStack(null).commit();
+			
+			TiposDeMultaFragment porTiposFragment = new TiposDeMultaFragment();
+			FragmentTransaction ftt = getSupportFragmentManager().beginTransaction();
+			ftt.replace(R.id.content_frame, porTiposFragment, "TAG_FRAGMENT");
+			ftt.addToBackStack(null);
+			ftt.commit();
+			
 			break;			
 		case 2:			
 			fragmentManager.beginTransaction().replace(R.id.content_frame, new DetalleMultaFragment()).commit();						
