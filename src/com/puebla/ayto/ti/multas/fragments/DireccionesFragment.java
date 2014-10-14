@@ -68,12 +68,6 @@ public class DireccionesFragment extends Fragment {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
 		    	    	
-		    	//Toast.makeText(getActivity(), "El elemento seleccionado es, " + Integer.toString(posision),Toast.LENGTH_LONG).show();	
-		    	//Multa mMultaDatos = mListView.get(posision);
-		    	
-		    	
-		    	
-		    	
 		    	
 		    	String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(mDireccionesList.get(posision)[3]), Double.parseDouble(mDireccionesList.get(posision)[4]));
 		    	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));

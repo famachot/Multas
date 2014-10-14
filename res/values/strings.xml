@@ -16,8 +16,8 @@
     
     
     <!-- Strings para el menu principal -->
-    <string name="nom_user">Nombre de usuario</string>
-    <string name="email_user">email</string>
+    <string name="nom_user">Listado de Multas</string>
+    <string name="email_user">Ayuntamiento de Puebla</string>
     <string name="image_icon_menu">Menu</string>
     <string name="textMenu">N/D</string>
     <string name="drawer_open">Menu abierto</string>
@@ -86,10 +86,14 @@
     
     
     <string	name="item_26">Conducir vehículos o permitir que se haga sin la licencia o permiso correspondiente, o estando roto,deteriorado o ilegible</string>
-    <string	name="item_6">*** ***Circular sin placas o permiso de circulación correspondientes a</string>
+    <string	name="item_6">Circular sin placas o permiso de circulación correspondientes a</string>
     <string	name="item_87">Provocar, intencional o negligentemente, un accidente de tránsito</string>
     
     
+    <string name="titleDialogNoInternet">Conexion a Internet</string>
+    <string name="mensajeDialogNoInternet">Tu dispositivo no tiene Conexion a Internet, ¿Deseas conectarte?</string>
+    <string name="alert_dialog_ok">Si</string>
+    <string name="alert_dialog_no">No</string>
     
 
 </resources>

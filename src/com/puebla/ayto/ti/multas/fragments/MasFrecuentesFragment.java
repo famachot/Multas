@@ -28,7 +28,6 @@ public class MasFrecuentesFragment extends Fragment {
 	private OnMultasSelectedListener mCallback;
 	ArrayList<Multa> mListaMulta;
 	
-	private static final String TAG_Fragment = "TAG_Fragment";
 	
 	
 	public MasFrecuentesFragment() {
@@ -37,7 +36,7 @@ public class MasFrecuentesFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+		Bundle savedInstanceState) {
 		
 		DB = new AlertasDbAdapter(getActivity());
 		
@@ -52,17 +51,9 @@ public class MasFrecuentesFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
 		
 		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
-		
 		mListView.setAdapter(mAdaptadorMulta);
 		mListView.setOnItemClickListener(new ListViewClickListener() );
-		
-		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
-		
-//		String info = (verificaDatosDB()) ? "Si funciono" : "jeje No funciono";
-		
-		
-		//txtFragmentDownload.setText("");
-		
+	
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT ));		
 		return rootView;		
 	}
@@ -72,8 +63,7 @@ public class MasFrecuentesFragment extends Fragment {
 	 private class ListViewClickListener implements ListView.OnItemClickListener {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
-		    	    	
-		    	//Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
+		    	    		
 		    	Multa mMultaDatos = mListaMulta.get(posision);
 		    	mCallback.onMultaSelected(mMultaDatos.getId() , mMultaDatos.getMulta(),
 		    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),

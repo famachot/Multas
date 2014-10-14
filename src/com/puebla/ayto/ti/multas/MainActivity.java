@@ -8,11 +8,15 @@ import java.util.ArrayList;
 
 import navigationList.NavigationList;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.SQLException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -38,6 +42,7 @@ import br.liveo.utils.Menus;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
 import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment.MuestraDetalleFragment;
@@ -67,14 +72,12 @@ MultasPorTipoInter, OnMultasSelectedTipo{
 	private RelativeLayout mRelativeLayoutUser;
 	private ActionBarDrawerToggleCompat mDrawerToggle;
 	
-	private NavigationAdapter navigationAdapter;
-	 
 	
+	
+	private NavigationAdapter navigationAdapter;
 	private AlertasDbAdapter DB;
 	
 	private static final String TAG_ASYN_CONECTOR ="TAG_ASYNC_MULTAS";
-	private static final String TAG_DEBUG ="TAG_DEBUG";
-	private static final String TAG_RECUPERAR_DATOS ="TAG_RECUPERAR_DATOS";
 	
 
 	
@@ -88,8 +91,6 @@ MultasPorTipoInter, OnMultasSelectedTipo{
 		setContentView(R.layout.content_app);
 		
 	
-		
-		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout); //Se obtiene una referencia de todo el drawer layout (Todo el contenedor)
 		mLayoutMenu = (LinearLayout) findViewById(R.id.layout_menu); // Se obtiene el layout que contiene toda la parte del menu lateral
 		mListViewMenu = (ListView) findViewById(R.id.listView_drawer); // Se obtiene una referencia del ListView 	que contendra el menu
@@ -104,8 +105,7 @@ MultasPorTipoInter, OnMultasSelectedTipo{
 		mListViewMenu.setAdapter(navigationAdapter);
 		mListViewMenu.setOnItemClickListener(new DrawerItemClickListener());
 		
-		
-		
+
 		mDrawerToggle = new ActionBarDrawerToggleCompat(this, mDrawerLayout);
 		
 		
@@ -113,9 +113,6 @@ MultasPorTipoInter, OnMultasSelectedTipo{
 	    getSupportActionBar().setHomeButtonEnabled(true);
 		
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-		
-		
-		
 		
 		if (savedInstanceState != null) { 			
 			setLastPosition(savedInstanceState.getInt(Constant.LAST_POSITION)); 				
@@ -262,43 +259,16 @@ private void setFragmentList(int position){
 		
 		FragmentManager fragmentManager = getSupportFragmentManager();							
 		
-		
-/**
- * 
- * MultasPorTipoFragment mDetalleFragment =  MultasPorTipoFragment.newInstance(args);
-		
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		
-		
-		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
-        ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
-        ft.addToBackStack(null);
-        ft.commit();
- * 
- * */
-		//TiposDeMultaFragment FragmentPorTipo = new TiposDeMultaFragment();
-		
-		//FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		//FragmentTransaction ft = getFragmentManager().beginTransaction();
-		
 		switch (position) {
 		case 0:			
-			//fragmentManager.beginTransaction().replace(R.id.content_frame, new MasFrecuentesFragment().commit();
 			MasFrecuentesFragment principalFragment = new MasFrecuentesFragment();
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.content_frame, principalFragment, "TAG_FRAGMENT");
 			ft.disallowAddToBackStack();
 			ft.commit();
-			
-
-			
+	
 			break;					
 		case 1:			
-			//fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).addToBackStack(null).commit();
-			//TiposDeMultaFragment FragmentPorTipo = new TiposDeMultaFragment();
-		///	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-			//ft.remove(null).add( R.id.content_frame, FragmentPorTipo,"").addToBackStack(null).commit();
-			
 			TiposDeMultaFragment porTiposFragment = new TiposDeMultaFragment();
 			FragmentTransaction ftt = getSupportFragmentManager().beginTransaction();
 			ftt.replace(R.id.content_frame, porTiposFragment, "TAG_FRAGMENT");
@@ -346,7 +316,6 @@ private void setFragmentList(int position){
 
 		@Override
 		public void onDrawerOpened(View drawerView) {	
-		//	navigationAdapter.notifyDataSetChanged();  Cambio el estado del adaptador 			
 			supportInvalidateOptionsMenu();			
 		}		
 	}
@@ -363,100 +332,54 @@ private void setFragmentList(int position){
 	
 	public void MuestraMasFrecuentes() {
 		DB = new AlertasDbAdapter(this);
-		
-		ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
-		//ArrayList<Multa> mListMultasFrecuentes = new ArrayList<Multa>();
+		ArrayList<Multa> mListaFrecuentes = new ArrayList<Multa>();
 		
 		try {
 			DB.open();
-			mListaDeTipos = DB.buscaTiposDeMultasObjects();
-			if (mListaDeTipos == null) {
-				Toast.makeText(this, "Debe descrgar toda la información", Toast.LENGTH_LONG).show();
-				RecuperarTiposMulta();
-			}else {
-				
+			mListaFrecuentes = DB.buscaMultasFrecuentes(true);
+			DB.close();
+			
+			if (mListaFrecuentes.size() < 1) {
+	
+				if (estaConectado()) {
+					RecuperarTiposMulta();
+				}else {
+					showDialogInternet();
+				}
 			}
 		}catch(Exception e) {
 			
 		}
 		
 	}
-
-	  
-	  
-	  public boolean verificaTiposMultas() {
-		  DB = new AlertasDbAdapter(this);
-		  
-		  ArrayList<TiposDeMulta> mListaDeTipos = new ArrayList<TiposDeMulta>();
-		  ArrayList<Multa> mListMultas = new ArrayList<Multa>();
-		  ArrayList<Multa> mListMultasPOrTipo = new ArrayList<Multa>();
-		  try {
-			  DB.open();
-			  mListaDeTipos = DB.buscaTiposDeMultasObjects();
-			  mListMultas = DB.buscaMultasFrecuentes(true);
-			  mListMultasPOrTipo = DB.RetornaMultasPorTipo(6);
-			  for(int x=0; x < mListaDeTipos.size(); x++) {
-				  Log.e(TAG_RECUPERAR_DATOS, "Lista de tipos de multa ID: " + mListaDeTipos.get(x).getId() + ", texto -> " + mListaDeTipos.get(x).getDescripcion());
-			  }
-
-			  for(int x=0; x < mListMultas.size(); x++) {
-				  Log.d(TAG_RECUPERAR_DATOS, "Los datos almacenados en la BD son (Objetos) ID: " + mListMultas.get(x).getId() + ", Infraccion -> " + mListMultas.get(x).getMulta());
-			  }
-			  
-			  for(int x=0; x < mListMultasPOrTipo.size(); x++) {
-				  Log.d(TAG_RECUPERAR_DATOS, "Multas por tipo ID: " + mListMultasPOrTipo.get(x).getId() + ", Infraccion -> " + mListMultasPOrTipo.get(x).getMulta());
-			  }
-			  DB.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			DB.close();
-			Log.e(TAG_RECUPERAR_DATOS, "Error en el try verifica TiposMultas " + e.getMessage());
-			
-			e.printStackTrace();
-		}
-		  
-		  
-		  return true;}
 	
-	public void obtenerDatosDeMultas() {
+	
 
 
-			
-			
-			
-			
-
-	}
 	
 	private boolean agregaMultas(ArrayList<Multa> multas){
 		DB = new AlertasDbAdapter(this);
-		 Long result = null;
+		Long result = null;
 		int contador = multas.size();
 		boolean bandera = true; 
 		 
-		 
-		 Log.d(TAG_DEBUG, "Antes de intentar crear la notificacion en la bd ");
 		 try {
 			DB.open();
 			for(int i = 0; i<contador;i++) {
-				//Multa mMulta = multas.get(i);
 				
 			result = DB.CreateMulta(multas.get(i).getId(), multas.get(i).getMulta_id(), 
 						multas.get(i).getMulta(),multas.get(i).getRango_importe_ini(), 
 					 multas.get(i).getRango_importe_fin(), multas.get(i).getFundamento(),
 					 multas.get(i).getTipo(), multas.get(i).getFrecuencia(),
 					  (multas.get(i).getFrecuente()) ? "1":"0");
-				Log.d(TAG_DEBUG,"Se agrego en la BD ->" + multas.get(i).getMulta());
+				
 				if (result == -1) {
-					Log.e(TAG_DEBUG,"No se agrego el siguiete objeto  -> id -> " + multas.get(i).getId() + ", Multa -> "  + multas.get(i).getMulta());
 					bandera = false;
 				}
 			}
-			
 		
 			DB.close();
 		} catch (SQLException e) {
-			Log.e(TAG_DEBUG, "Ocurrio un error al intentar crear una de las multas, se inspecciona el bloque db " + e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -466,47 +389,35 @@ private void setFragmentList(int position){
 	  
 	private boolean agregaTiposMultas(ArrayList<TiposDeMulta> tiposMulta){
 		DB = new AlertasDbAdapter(this);
-		 Long result = null;
+		Long result = null;
 		int contador = tiposMulta.size();
 		boolean bandera = true; 
 		 
-		 
-		 Log.d(TAG_DEBUG, "Antes de intentar crear la notificacion en la bd ");
 		 try {
 			DB.open();
 			for(int i = 0; i<contador;i++) {
-				//Multa mMulta = multas.get(i);
 				
 			result = DB.CreateTipoMulta(tiposMulta.get(i).getId(), tiposMulta.get(i).getTip_multa(), 
 					tiposMulta.get(i).getDescripcion());
 				if (result == -1) {
-					Log.e(TAG_DEBUG,"No se agrego el siguiete objeto id -> " + tiposMulta.get(i).getId() + ", Tipo de Multa -> "  + tiposMulta.get(i).getDescripcion());
 					bandera = false;
-				}else {
-					Log.d(TAG_DEBUG,"Se agrego el siguiete objeto id -> " + tiposMulta.get(i).getId() + ", Tipo de Multa -> "  + tiposMulta.get(i).getDescripcion() + ", En la Base de datos");
 				}
 			}
-			
-		
+
 			DB.close();
 		} catch (SQLException e) {
-			Log.e(TAG_DEBUG, "Ocurrio un error al intentar crear uno de los tipos de multa, se inspecciona el bloque db " + e.getMessage());
 			e.printStackTrace();
 		}
-		
 		return bandera;
-		
 	}
 	
 	  public void RecuperarTiposMulta(){
 	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/tipos/");
-	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
 	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
 	    }
 	  
 	  public void RecuperarMulta(){
 	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/multas/");
-	    	//Log.d(TAG, "Justo despues de formatear la url " + url + " ; y tambien una linea antes de la clase AsynConector");
 	    	new AsyncSolicitaMultas(this).execute(url);
 	    }
 	
@@ -527,12 +438,12 @@ private void setFragmentList(int position){
     		pd.show();
     		super.onPreExecute();
     	}
-//http://192.168.134.13/notificaciones/notificacion/1/
+    	
     	@Override
     	protected String doInBackground(String... urls) {
 
     		try {
-    			Log.d(TAG_ASYN_CONECTOR, "La consulta se realizara a la url: " + urls[0]);
+    			
     			return HttpRequest.get(urls[0]).accept("application/json").body();
     			
     		} catch (HttpRequestException exception) {
@@ -544,25 +455,18 @@ private void setFragmentList(int position){
     	
     	@Override
     	protected void onPostExecute(String result) {
-    		Log.d(TAG_ASYN_CONECTOR, "El resultado de la consulta es: " + result);
     		
     		if (result != null){
     		ArrayList<TiposDeMulta> mGetTiposMultas = getTiposDeMultas(result);
     			//mostrarDatos(mGetMultas, tipo);
     		if(agregaTiposMultas(mGetTiposMultas)) { 
     			RecuperarMulta();
-    		}else {
-    			 Log.e(TAG_ASYN_CONECTOR, "No se solicitaron las multas por que ocurrio un error ");
     		}
-    	 
-    		
     		
     		}
     		else
     		{
-    			//datoRecibido = false;
     			Toast.makeText(mContext, "No se obtuvieron datos de internet", Toast.LENGTH_SHORT).show();
-    			Log.d(TAG_ASYN_CONECTOR, "No se descargaron datos, al parecer el permiso de internet no funciona ");
     		}
     		
     		
@@ -589,16 +493,14 @@ private void setFragmentList(int position){
     		pd.show();
     		super.onPreExecute();
     	}
-//http://192.168.134.13/notificaciones/notificacion/1/
+    	
     	@Override
     	protected String doInBackground(String... urls) {
 
     		try {
-    			Log.d(TAG_ASYN_CONECTOR, "La consulta se realizara a la url: " + urls[0]);
     			return HttpRequest.get(urls[0]).accept("application/json").body();
     			
     		} catch (HttpRequestException exception) {
-    			Log.d(TAG_ASYN_CONECTOR, exception.getMessage());
     			return null;
     		}
     	}
@@ -606,12 +508,10 @@ private void setFragmentList(int position){
     	
     	@Override
     	protected void onPostExecute(String result) {
-    		Log.d(TAG_ASYN_CONECTOR, "El resultado de la consulta es: " + result);
     		
     		if (result != null){
     		ArrayList<Multa> mGetMultas = getMultas(result);
     		FragmentManager fragmentManager = getSupportFragmentManager();
-    			//mostrarDatos(mGetMultas, tipo);
     		    agregaMultas(mGetMultas);
     		    fragmentManager.beginTransaction().replace(R.id.content_frame, new MasFrecuentesFragment()).commit();
     		}
@@ -620,9 +520,7 @@ private void setFragmentList(int position){
     			//datoRecibido = false;
     			Toast.makeText(mContext, "No se obtuvieron datos de internet", Toast.LENGTH_SHORT).show();
     		}
-    		
-    		Log.d(TAG_ASYN_CONECTOR, "despues de crear el objeto tipo notificacion ");
-    		
+
     		pd.dismiss();
     		super.onPostExecute(result);
     	}	
@@ -640,7 +538,6 @@ private void setFragmentList(int position){
 		} catch (JsonSyntaxException e) { 
 			e.printStackTrace();
 			listMultas= null;
-			Log.d(TAG_ASYN_CONECTOR, "Error durante la creación de los objetos (Multas): " + e.getMessage());
 		}
 		 return listMultas;
 	}
@@ -650,13 +547,11 @@ private void setFragmentList(int position){
     	final Gson gson = new Gson();
 		final Type tipoListMultas = new TypeToken<ArrayList<Multa>>(){}.getType();
 		ArrayList<Multa> listMultas;
-		 
 		try {
 			listMultas = gson.fromJson(json, tipoListMultas);
 		} catch (JsonSyntaxException e) { 
 			e.printStackTrace();
 			listMultas= null;
-			Log.d(TAG_ASYN_CONECTOR, "Error durante la creación de los objetos (Multas): " + e.getMessage());
 		}
 		 return listMultas;
 	}
@@ -682,11 +577,8 @@ private void setFragmentList(int position){
 		args.putInt("num_multa", (frecuente) ? num_multa : -1);
 		
 		DetalleMultaFragment mDetalleFragment =  DetalleMultaFragment.newInstance(args);
-		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		
-		//FragmentTransaction ft = getFragmentManager().beginTransaction();
-		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
         ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
         ft.addToBackStack(null);
         ft.commit();
@@ -707,15 +599,9 @@ public void onMultaSelectedTipo(int id, String infraccion, String fundamento, in
 		args.putBoolean("frecuente", frecuente);
 		args.putInt("num_multa", (frecuente) ? num_multa : -1);
 		
-		
-		
-		
 		DetalleMultaFragment mDetalleFragment =  DetalleMultaFragment.newInstance(args);
-		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		
-		//FragmentTransaction ft = getFragmentManager().beginTransaction();
-		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
         ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
         ft.addToBackStack(null);
         ft.commit();
@@ -725,7 +611,6 @@ public void onMultaSelectedTipo(int id, String infraccion, String fundamento, in
 	
 	
 	public void dondePagar() {
-		//FragmentManager fragmentManager = getSupportFragmentManager();	
 		
 		DireccionesFragment mFt = new DireccionesFragment();
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -740,15 +625,85 @@ public void onMultaSelectedTipo(int id, String infraccion, String fundamento, in
 		args.putInt("id", id);
 
 		MultasPorTipoFragment mDetalleFragment =  MultasPorTipoFragment.newInstance(args);
-		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		
-		//FragmentTransaction ft = getFragmentManager().beginTransaction();
-		// fragmentManager.beginTransaction().replace(R.id.content_frame, new TiposDeMultaFragment()).commit();
         ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
         ft.addToBackStack(null);
         ft.commit();
 	}
+	
+	
+	
+
+	
+	
+	protected Boolean estaConectado(){
+		if(conectadoWifi()){
+			return true;
+			}else{
+				if(conectadoRedMovil()){
+					return true;
+				}else{
+					return false;
+				}
+		}
+	}
+	
+	
+	
+	protected Boolean conectadoWifi(){
+		ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity != null) {
+			NetworkInfo info = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			if (info != null) {
+				if (info.isConnected()) {
+					return true;
+				}else {
+					
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	protected Boolean conectadoRedMovil(){
+		ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity != null) {
+			NetworkInfo info = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			if (info != null) {
+				if (info.isConnected()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+
+	
+	public void showDialogInternet(){
+		AlertDialog.Builder builder =  new AlertDialog.Builder(MainActivity.this)
+									.setTitle(R.string.titleDialogNoInternet)
+									.setMessage(R.string.mensajeDialogNoInternet)
+									.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+						                    public void onClick(DialogInterface dialog, int whichButton) {
+						    
+						                    	startActivityForResult(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
+						                    
+						                    }
+						                })
+						             .setNegativeButton(R.string.alert_dialog_no, new DialogInterface.OnClickListener() {
+						                  public void onClick(DialogInterface dialog, int whichButton) {
+						                	 
+						                      
+						                  }
+						              });
+									
+		builder.show();
+	}
+
 	
 }
 

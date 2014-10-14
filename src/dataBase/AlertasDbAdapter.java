@@ -299,6 +299,7 @@ public class AlertasDbAdapter {
 		boolean elemento_26 = false;
 		boolean elemento_6 = false;
 		boolean elemento_87 = false;
+		
 		try {
 			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null,
 					EsquemaMultas.COLUMN_NAME_FRECUENTE + "=" + frecuencia,
@@ -471,12 +472,7 @@ public class AlertasDbAdapter {
 						mTipoMultas.setDescripcion(mCursor.getString(2));
 						mListTiposMulta.add(mTipoMultas);
 					}while(mCursor.moveToNext());
-				}else {
-					Log.d("debug1","No se le asigna null al array list");
-				mListTiposMulta = null;
 				}
-			}else {
-				
 			}
 			
 			//mCursor = mSQLiteDatabase.rawQuery("select * from TIPO_MULTAS", null);
