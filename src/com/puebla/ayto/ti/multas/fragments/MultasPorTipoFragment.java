@@ -86,7 +86,7 @@ public class MultasPorTipoFragment extends Fragment{
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
 		    	    	
-		    	Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
+		    	//Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
 		    	Multa mMultaDatos = mListaMulta.get(posision);
 		    	mCallback.onMultaSelectedTipo(mMultaDatos.getId() , mMultaDatos.getMulta(),
 		    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),

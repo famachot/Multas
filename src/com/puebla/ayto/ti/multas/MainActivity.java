@@ -117,7 +117,7 @@ MultasPorTipoInter, OnMultasSelectedTipo{
 		if (savedInstanceState != null) { 			
 			setLastPosition(savedInstanceState.getInt(Constant.LAST_POSITION)); 				
 			
-			if (lastPosition < 5){
+			if (lastPosition < 2){
 				navigationAdapter.resetarCheck();			
 				navigationAdapter.setChecked(lastPosition, true);
 			}    	
@@ -257,14 +257,19 @@ MultasPorTipoInter, OnMultasSelectedTipo{
 	
 private void setFragmentList(int position){
 		
-		FragmentManager fragmentManager = getSupportFragmentManager();							
+	//	FragmentManager fragmentManager = getSupportFragmentManager();		//No se ocupa y consume memoria					
 		
 		switch (position) {
 		case 0:			
 			MasFrecuentesFragment principalFragment = new MasFrecuentesFragment();
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.content_frame, principalFragment, "TAG_FRAGMENT");
-			ft.disallowAddToBackStack();
+			 //ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+			//ft.disallowAddToBackStack();// Verificar esta linea
+
+		     //   int num = getSupportFragmentManager().getBackStackEntryCount(); // Si funciona y regresa el númerod e fragmentos en la pila
+		     //Toast.makeText(this, "Numero de fragmentos en la pila " + num, Toast.LENGTH_SHORT).show();
+		    getSupportFragmentManager().popBackStack(0,FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ft.commit();
 	
 			break;					
@@ -273,19 +278,14 @@ private void setFragmentList(int position){
 			FragmentTransaction ftt = getSupportFragmentManager().beginTransaction();
 			ftt.replace(R.id.content_frame, porTiposFragment, "TAG_FRAGMENT");
 			ftt.addToBackStack(null);
+			// ftt.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 			ftt.commit();
 			
 			break;			
-		case 2:			
-			fragmentManager.beginTransaction().replace(R.id.content_frame, new DetalleMultaFragment()).commit();						
-			break;				
-			
-		default:
-			Toast.makeText(getApplicationContext(), "implement other fragments here", Toast.LENGTH_SHORT).show();
-			break;	
+		
 		}			
 	
-		if (position < 5){
+		if (position < 2){ // Cambiar, solo hay dos posibles opciones
 			navigationAdapter.resetarCheck();			
 			navigationAdapter.setChecked(position, true);
 		}
@@ -328,9 +328,15 @@ private void setFragmentList(int position){
 	
 	/*** Sección para verificar si ya hay datos en la BD  ***/
 	
+	/***
+	 * 
+	 * En el siguiente metodo debo de mandar a eliminar todos los tipos d multas por si se da el caso 
+	 * de que haya tipos de multas pero no se hayan descargado las multas, esto para evitar problemas con 
+	 * las claves primarias a la hora de descagar todo, entonces antes de solicitar los datos
+	 * debo eliminar todo lo de las tablas 
+	 * ***/
 	
-	
-	public void MuestraMasFrecuentes() {
+	public void MuestraMasFrecuentes() { //Debo utilizar este metodo para no hacer varias consultas a la base de datos y aprovechar los recursos al maximo
 		DB = new AlertasDbAdapter(this);
 		ArrayList<Multa> mListaFrecuentes = new ArrayList<Multa>();
 		
@@ -360,12 +366,12 @@ private void setFragmentList(int position){
 	private boolean agregaMultas(ArrayList<Multa> multas){
 		DB = new AlertasDbAdapter(this);
 		Long result = null;
-		int contador = multas.size();
+		//int contador = multas.size(); //Verificar si puede precindir de esta variable para no consumir recursos 
 		boolean bandera = true; 
 		 
 		 try {
 			DB.open();
-			for(int i = 0; i<contador;i++) {
+			for(int i = 0; i < multas.size();i++) {
 				
 			result = DB.CreateMulta(multas.get(i).getId(), multas.get(i).getMulta_id(), 
 						multas.get(i).getMulta(),multas.get(i).getRango_importe_ini(), 
@@ -390,12 +396,12 @@ private void setFragmentList(int position){
 	private boolean agregaTiposMultas(ArrayList<TiposDeMulta> tiposMulta){
 		DB = new AlertasDbAdapter(this);
 		Long result = null;
-		int contador = tiposMulta.size();
+		//int contador = tiposMulta.size();// verificar si puedo precindir de esta variable
 		boolean bandera = true; 
 		 
 		 try {
 			DB.open();
-			for(int i = 0; i<contador;i++) {
+			for(int i = 0; i< tiposMulta.size();i++) {
 				
 			result = DB.CreateTipoMulta(tiposMulta.get(i).getId(), tiposMulta.get(i).getTip_multa(), 
 					tiposMulta.get(i).getDescripcion());
@@ -412,12 +418,12 @@ private void setFragmentList(int position){
 	}
 	
 	  public void RecuperarTiposMulta(){
-	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/tipos/");
+	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/tipos/"); //Cambiar la url
 	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
 	    }
 	  
 	  public void RecuperarMulta(){
-	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/multas/");
+	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/multas/"); //Cambiar la url
 	    	new AsyncSolicitaMultas(this).execute(url);
 	    }
 	
@@ -457,11 +463,11 @@ private void setFragmentList(int position){
     	protected void onPostExecute(String result) {
     		
     		if (result != null){
-    		ArrayList<TiposDeMulta> mGetTiposMultas = getTiposDeMultas(result);
+    			ArrayList<TiposDeMulta> mGetTiposMultas = getTiposDeMultas(result);
     			//mostrarDatos(mGetMultas, tipo);
-    		if(agregaTiposMultas(mGetTiposMultas)) { 
-    			RecuperarMulta();
-    		}
+	    		if(agregaTiposMultas(mGetTiposMultas)) { 
+	    			RecuperarMulta();
+	    		}
     		
     		}
     		else
@@ -475,7 +481,7 @@ private void setFragmentList(int position){
     		super.onPostExecute(result);
     	}	
     }
-	
+	//Port verificar todo lo siguiwntw 
     public class AsyncSolicitaMultas extends AsyncTask<String, Long, String>  {
     	private Context mContext;
        	private ProgressDialog pd;
@@ -581,6 +587,7 @@ private void setFragmentList(int position){
 		
         ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
         ft.addToBackStack(null);
+       // ft.setTransition(1);
         ft.commit();
 		
 	}
