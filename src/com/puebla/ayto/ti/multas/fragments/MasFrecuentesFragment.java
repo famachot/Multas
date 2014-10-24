@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-
 import android.widget.ListView;
-
 
 import com.puebla.ayto.ti.multas.R;
 import com.puebla.ayto.ti.multas.adapter.LasMasFrecuentesAdapter;
@@ -37,7 +36,7 @@ public class MasFrecuentesFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+		Bundle savedInstanceState) {
 		
 		DB = new AlertasDbAdapter(getActivity());
 		
@@ -45,23 +44,16 @@ public class MasFrecuentesFragment extends Fragment {
 		 mListaMulta = DB.buscaMultasFrecuentes(true);
 
 		DB.close();
+	
 
 		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta);
 		// TODO Auto-generated method stub		
 		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
 		
 		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
-		
 		mListView.setAdapter(mAdaptadorMulta);
 		mListView.setOnItemClickListener(new ListViewClickListener() );
-		
-		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
-		
-//		String info = (verificaDatosDB()) ? "Si funciono" : "jeje No funciono";
-		
-		
-		//txtFragmentDownload.setText("");
-		
+	
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT ));		
 		return rootView;		
 	}
@@ -71,7 +63,6 @@ public class MasFrecuentesFragment extends Fragment {
 	 private class ListViewClickListener implements ListView.OnItemClickListener {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
-		    	    	
 
 		    	Multa mMultaDatos = mListaMulta.get(posision);
 		    	mCallback.onMultaSelected(mMultaDatos.getId() , mMultaDatos.getMulta(),

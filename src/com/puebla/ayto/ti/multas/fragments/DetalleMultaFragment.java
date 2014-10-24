@@ -20,7 +20,6 @@ public class DetalleMultaFragment extends Fragment {
 	
 	
 	MuestraDetalleFragment mCallBack;
-	public static final String TAG = "DetalleFragment";
 	
 	private static final double salario = 63.77;
 	

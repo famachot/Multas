@@ -57,19 +57,23 @@ public class TiposDeMultaFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
+			View rootView = inflater.inflate(R.layout.tipos_de_multa_fragment, container, false);
+			ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMultaFragment);
+		
+		
+		
 		DB = new AlertasDbAdapter(getActivity());
 		
 		DB.open();
 		 mListaTipos = DB.buscaTiposDeMultasObjects();
 		DB.close();
 		
-		mAdaptadorTipo = new AdapterElementos(getActivity(), mListaTipos);
-		// TODO Auto-generated method stub		
-		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
 		
-		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
+			mAdaptadorTipo = new AdapterElementos(getActivity(), mListaTipos);
+			mListView.setAdapter(mAdaptadorTipo);	
 		
-		mListView.setAdapter(mAdaptadorTipo);
+		
+		
 		mListView.setOnItemClickListener(new ListViewClickListener());
 		//txtFragmentDownload = (TextView) rootView.findViewById(R.id.textView2);
 		

@@ -20,7 +20,7 @@ public class AlertasDbAdapter {
 	
 	
 	private final Context mContext;
-	private static final String DataBaseName = "MultasDB";
+	private static final String DataBaseName = "DataBaseName";
 	private static final int DataBaseVersion = 1;
 	
 	private DataBaseHelper mDataBaseHelper;
@@ -299,6 +299,7 @@ public class AlertasDbAdapter {
 		boolean elemento_26 = false;
 		boolean elemento_6 = false;
 		boolean elemento_87 = false;
+		
 		try {
 			mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null,
 					EsquemaMultas.COLUMN_NAME_FRECUENTE + "=" + frecuencia,
@@ -391,7 +392,7 @@ public class AlertasDbAdapter {
 					mMulta.setFundamento(mCursor.getString(5));
 					mMulta.setTipo(mCursor.getInt(6));
 					mMulta.setFrecuecia(mCursor.getInt(7));
-					Log.d(DataBaseName, "Multa: " + mCursor.getString(2) + ", Es frecuente " + mCursor.getString(8));
+					Log.d(DataBaseName, "Multa: " + mCursor.getString(2).substring(0, 15) + ", Es frecuente " + mCursor.getString(8) + ", Num multa: " + mCursor.getInt(1));
 					mMulta.setFrecuente((mCursor.getString(8).equals("1")) ? true : false);
 					
 					
@@ -412,7 +413,7 @@ public class AlertasDbAdapter {
 							if (mCursor.getInt(1) == 87) {
 								if (elemento_87 == false) {
 									mListMulta.add(mMulta);
-									elemento_87 = true;
+								    elemento_87 = true;
 								}
 							}else {
 								mListMulta.add(mMulta);
@@ -471,12 +472,7 @@ public class AlertasDbAdapter {
 						mTipoMultas.setDescripcion(mCursor.getString(2));
 						mListTiposMulta.add(mTipoMultas);
 					}while(mCursor.moveToNext());
-				}else {
-					Log.d("debug1","No se le asigna null al array list");
-				mListTiposMulta = null;
 				}
-			}else {
-				
 			}
 			
 			//mCursor = mSQLiteDatabase.rawQuery("select * from TIPO_MULTAS", null);

@@ -27,7 +27,7 @@ public class MultasPorTipoFragment extends Fragment{
 	
 	OnMultasSelectedTipo mCallback;
 	
-	final String TAG_FRECUENTES = "TAG_FRECUENTES";
+	final String TAG_FRECUENTES_Fragment = "TAG_FRECUENTES_Fragment";
 	
 	 public MultasPorTipoFragment() {
 		// TODO Auto-generated constructor stub
@@ -58,7 +58,7 @@ public class MultasPorTipoFragment extends Fragment{
 		
 		for (int x = 0; x < mListaMulta.size(); x++) {
 			
-			Log.d(TAG_FRECUENTES, "Multa: " + mListaMulta.get(x).getMulta().substring(0, 20) + ", Frecuente: " +  mListaMulta.get(x).getFrecuente() + 
+			Log.d(TAG_FRECUENTES_Fragment, "Multa: " + mListaMulta.get(x).getMulta().substring(0, 5) + ", Frecuente: " +  mListaMulta.get(x).getFrecuente() + 
 					",  Multa_id: " + mListaMulta.get(x).getMulta_id());
 		}
 		
@@ -69,9 +69,9 @@ public class MultasPorTipoFragment extends Fragment{
 
 		mAdaptador = new MultasPorTipoAdapter(getActivity(), mListaMulta);
 		// TODO Auto-generated method stub		
-		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
+		View rootView = inflater.inflate(R.layout.multas_por_tipo_fragment, container, false);
 		
-		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMulta);
+		ListView mListView = (ListView) rootView.findViewById(R.id.list_tiposDeMultaPotTipo);
 		
 		mListView.setAdapter(mAdaptador);
 		mListView.setOnItemClickListener(new ListViewClickListener());
