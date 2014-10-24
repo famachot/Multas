@@ -31,6 +31,14 @@
         android:layout_marginTop="20dp"
         android:src="@drawable/logo_ayuntamiento_original" />
 
+    <View 
+        android:id="@+id/linea_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        android:layout_marginBottom="5dp"/>
+    
+    
     <TextView
         android:id="@+id/titulo_fundamento"
         android:layout_width="wrap_content"

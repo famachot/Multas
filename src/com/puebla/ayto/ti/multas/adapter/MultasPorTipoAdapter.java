@@ -37,10 +37,10 @@ public View getView(int position, View convertView,ViewGroup parent){
 		
 		holder = null;
 		View view = convertView;
-		final Multa mMulta = listaMulta.get(position);
+		Multa mMulta = listaMulta.get(position);
 		
 	
-		Log.d(TAG_ADAPTER, "La posisión es :" + Integer.toString(position));
+	//	Log.d(TAG_ADAPTER, "La posisión es :" + Integer.toString(position));
 		
 		if(view == null) {
 			view = LayoutInflater.from(mActivity).inflate(R.layout.item_multa_tipo, null);
@@ -77,14 +77,25 @@ public View getView(int position, View convertView,ViewGroup parent){
 						else
 							if (mMulta.getMulta_id() == 87)
 								holder.infraccion.setText(R.string.item_87);
-								//holder.infraccion.setText("este es el que no funcinaba **");
-							else
+
+							else {
 								holder.infraccion.setText(infraccion_text(mMulta.getMulta()));
-					} 
-						
+								if (mMulta.getFrecuente()) {
+									holder.txt_frecuente.setVisibility(View.VISIBLE);
+								}
+							}
+								
 			
 			
-				
+				if(verificaFrecuente(mMulta.getFrecuencia())){
+					//holder.txt_frecuente.setText( "Frecuente: " + Integer.toString(mMulta.getFrecuencia()));
+						//holder.txt_frecuente.setVisibility(View.VISIBLE);
+						if (holder.txt_frecuente != null){
+		
+						}
+				}	
+
+			}
 		}
 		return view;
 	}
@@ -139,7 +150,7 @@ public View getView(int position, View convertView,ViewGroup parent){
 	
 
 	private String infraccion_text(String txt) {
-		return (txt.length()> 250) ? txt.substring(0, 247) + "..." : txt;
+		return (txt.length()> 250) ? txt.substring(0, 247) + " ..." : txt;
 	}
 
 	public int getCount(){
