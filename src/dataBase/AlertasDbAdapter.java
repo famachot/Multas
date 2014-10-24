@@ -486,6 +486,43 @@ public class AlertasDbAdapter {
 	
 	
 	
+	//Multas que pertenecen a un mismo tipo 
+		public ArrayList<Multa> multasPorGrupo(int id){
+			Cursor mCursor = null;
+			ArrayList<Multa> multasPorGrupoLis = new ArrayList<Multa>();
+			try {
+				mCursor = mSQLiteDatabase.query(true, EsquemaMultas.TABLE_NAME, null ,
+						EsquemaMultas.COLUMN_NAME_NUMERO_MULTA + "=" + id,
+						null, null, null,EsquemaMultas.COLUMN_NAME_RANGO_INICIAL,null);
+				
+				if(mCursor != null) {
+					if(mCursor.moveToFirst()) {
+						do {
+							Multa mMulta = new Multa();
+							mMulta.setId(mCursor.getInt(0));
+							mMulta.setMulta_id(mCursor.getInt(1));
+							mMulta.setMulta(mCursor.getString(2));
+							mMulta.setRango_importe_ini(mCursor.getInt(3));
+							mMulta.setRango_importe_fin(mCursor.getInt(4));
+							mMulta.setFundamento(mCursor.getString(5));
+							mMulta.setTipo(mCursor.getInt(6));
+							mMulta.setFrecuecia(mCursor.getInt(7));
+							multasPorGrupoLis.add(mMulta);
+							Log.d("DataBaseNameGrupo", "Multa: " + mCursor.getString(2) + ", Es frecuente " + mCursor.getString(8) + ", Num multa: " + mCursor.getInt(1));
+						}while(mCursor.moveToNext());
+					}
+				}
+				
+				//mCursor = mSQLiteDatabase.rawQuery("select * from TIPO_MULTAS", null);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("DB", "Ocurrio un error al intentar obtener los datos de la tabla Tipos de Multas -> " + e.getMessage());
+			}
+			return multasPorGrupoLis;
+		}
+		
+	
 	
 	
 }

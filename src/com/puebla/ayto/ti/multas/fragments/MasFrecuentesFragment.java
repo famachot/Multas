@@ -63,12 +63,26 @@ public class MasFrecuentesFragment extends Fragment {
 	 private class ListViewClickListener implements ListView.OnItemClickListener {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
-
-		    	Multa mMultaDatos = mListaMulta.get(posision);
-		    	mCallback.onMultaSelected(mMultaDatos.getId() , mMultaDatos.getMulta(),
+	        	Multa mMultaDatos = mListaMulta.get(posision);
+	        	
+	        	switch (mMultaDatos.getMulta_id()) {
+	        		case 26:
+	        			mCallback.onMultaSelectedGrupo(mMultaDatos.getMulta_id());
+	        			break;
+	        		case 6:
+	        			mCallback.onMultaSelectedGrupo(mMultaDatos.getMulta_id());
+	        			break;
+	        		default:
+	        			mCallback.onMultaSelected(mMultaDatos.getId() , mMultaDatos.getMulta(),
 		    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),
 		    			mMultaDatos.getRango_importe_fin(), mMultaDatos.getFrecuente(), 
 		    			mMultaDatos.getMulta_id());
+	        		break;
+	        			
+	        	}
+	        	
+		    	
+		    	
 		    	
 		    	
 		    		    	
@@ -80,6 +94,8 @@ public class MasFrecuentesFragment extends Fragment {
 	    public interface OnMultasSelectedListener {
 	    	
 	        public void onMultaSelected(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa);
+	        
+	        public void onMultaSelectedGrupo(int id);
 	    }
 	    
 	    

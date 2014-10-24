@@ -593,6 +593,13 @@ private void setFragmentList(int position){
 	}
 	
 	
+	public void onMultaSelectedGrupo(int id) {
+		
+		DB.open();
+		DB.multasPorGrupo(id);
+		DB.close();
+	}
+	
 	
 public void onMultaSelectedTipo(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa) {
 		
