@@ -88,10 +88,27 @@ public class MultasPorTipoFragment extends Fragment{
 		    	    	
 		    	//Toast.makeText(getActivity(), "El elemento seleccionado es",Toast.LENGTH_LONG).show();	
 		    	Multa mMultaDatos = mListaMulta.get(posision);
-		    	mCallback.onMultaSelectedTipo(mMultaDatos.getId() , mMultaDatos.getMulta(),
-		    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),
-		    			mMultaDatos.getRango_importe_fin(), mMultaDatos.getFrecuente(), 
-		    			mMultaDatos.getMulta_id());
+		    	
+		    	
+		    	switch (mMultaDatos.getMulta_id()) {
+	        	
+        		case 26:
+        			mCallback.onMultaSelectedTipo(mMultaDatos.getMulta_id());
+        			break;
+        		case 6:
+        			mCallback.onMultaSelectedTipo(mMultaDatos.getMulta_id());
+        			break;
+        		case 87:
+        			mCallback.onMultaSelectedTipo(mMultaDatos.getMulta_id());
+        			break;
+        		default:
+        			mCallback.onMultaSelectedTipo(mMultaDatos.getId() , mMultaDatos.getMulta(),
+	    			mMultaDatos.getFundamento(), mMultaDatos.getRango_importe_ini(),
+	    			mMultaDatos.getRango_importe_fin(), mMultaDatos.getFrecuente(), 
+	    			mMultaDatos.getMulta_id());
+        		break;
+        			
+        	}
 		    		    	
 	        }
 	    }
@@ -101,6 +118,7 @@ public class MultasPorTipoFragment extends Fragment{
     public interface OnMultasSelectedTipo {
     	
         public void onMultaSelectedTipo(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa);
+        public void onMultaSelectedTipo(int id);
     }
     
     

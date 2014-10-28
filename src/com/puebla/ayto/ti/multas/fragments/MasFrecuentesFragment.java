@@ -25,6 +25,8 @@ public class MasFrecuentesFragment extends Fragment {
 	private LasMasFrecuentesAdapter mAdaptadorMulta; 
 	private AlertasDbAdapter DB;
 
+		private static final String DEBUG_GRUPOS = "DEBUG_GRUPOS";
+
 	private OnMultasSelectedListener mCallback;
 	ArrayList<Multa> mListaMulta;
 	
@@ -46,7 +48,7 @@ public class MasFrecuentesFragment extends Fragment {
 		DB.close();
 	
 
-		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta);
+		mAdaptadorMulta = new LasMasFrecuentesAdapter(getActivity(), mListaMulta, false);
 		// TODO Auto-generated method stub		
 		View rootView = inflater.inflate(R.layout.contenedor_de_elementos, container, false);
 		
@@ -64,12 +66,16 @@ public class MasFrecuentesFragment extends Fragment {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int posision, long id) {          	        	
 	        	Multa mMultaDatos = mListaMulta.get(posision);
-	        	
+	        	Log.d(DEBUG_GRUPOS, "id de la multa " + mMultaDatos.getMulta_id());
 	        	switch (mMultaDatos.getMulta_id()) {
+	        	
 	        		case 26:
 	        			mCallback.onMultaSelectedGrupo(mMultaDatos.getMulta_id());
 	        			break;
 	        		case 6:
+	        			mCallback.onMultaSelectedGrupo(mMultaDatos.getMulta_id());
+	        			break;
+	        		case 87:
 	        			mCallback.onMultaSelectedGrupo(mMultaDatos.getMulta_id());
 	        			break;
 	        		default:

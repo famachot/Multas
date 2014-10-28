@@ -4,12 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+         >
+
+        <TextView
+            android:id="@+id/txt_texto_multa"
+			style="@style/styleNotaDetalle"
+			android:gravity="top"
+            android:text="@string/infraccion"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/list_tiposDeMulta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:divider="@color/azulAyuntamiento"
-		android:dividerHeight=".5px">
+		android:dividerHeight="1px">
     </ListView>
 
 </LinearLayout>

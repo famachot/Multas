@@ -19,13 +19,16 @@ public class LasMasFrecuentesAdapter extends BaseAdapter {
 
 	private Activity mActivity;
 	private ArrayList<Multa> listaMulta;
+	private boolean esGrupo;
 	public boolean id_26 = false;
 	public boolean id_6 = false;
 	
 	
-	public LasMasFrecuentesAdapter(Activity mActivity, ArrayList<Multa> listaMulta){
+	
+	public LasMasFrecuentesAdapter(Activity mActivity, ArrayList<Multa> listaMulta,  boolean esGrupo){
 		this.mActivity = mActivity;
 		this.listaMulta = listaMulta; 
+		this.esGrupo =  esGrupo;
 	}
 
 	
@@ -62,10 +65,13 @@ public View getView(int position, View convertView,ViewGroup parent){
 				holder.icono_frecuente.setImageResource(id_icono_frecuente(mMulta.getMulta_id()));
 				//holder.Id_tipo.setTextSize(20);
 			}
-			
-			if (holder.infraccion != null){
+			//String str = ((esGrupo) ? mMulta.getMulta() : "");
+			if (esGrupo)
+				holder.infraccion.setText( mMulta.getMulta());
+			else
+			  if (holder.infraccion != null){
 				if(mMulta.getMulta_id() == 26)
-					holder.infraccion.setText(R.string.item_26);
+					holder.infraccion.setText(R.string.item_6);
 					else 
 						if (mMulta.getMulta_id() == 6) {
 							holder.infraccion.setText(R.string.item_6);
@@ -123,7 +129,7 @@ public View getView(int position, View convertView,ViewGroup parent){
 		return (txt.length()> 140) ? true : false;
 	}
 	
-	private int id_icono_frecuente(int id) {
+	public static int id_icono_frecuente(int id) {
 		int icon_pk;
 		switch (id) {
 		case 58:

@@ -42,13 +42,14 @@ import br.liveo.utils.Menus;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
 import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment.MuestraDetalleFragment;
 import com.puebla.ayto.ti.multas.fragments.DireccionesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment;
 import com.puebla.ayto.ti.multas.fragments.MasFrecuentesFragment.OnMultasSelectedListener;
+import com.puebla.ayto.ti.multas.fragments.MultasPorGrupo;
+import com.puebla.ayto.ti.multas.fragments.MultasPorGrupo.OnMultasGrupoSelected;
 import com.puebla.ayto.ti.multas.fragments.MultasPorTipoFragment;
 import com.puebla.ayto.ti.multas.fragments.MultasPorTipoFragment.OnMultasSelectedTipo;
 import com.puebla.ayto.ti.multas.fragments.TiposDeMultaFragment;
@@ -61,7 +62,7 @@ import dataBase.AlertasDbAdapter;
 
 public class MainActivity extends ActionBarActivity 
 implements OnMultasSelectedListener, MuestraDetalleFragment,
-MultasPorTipoInter, OnMultasSelectedTipo{
+MultasPorTipoInter, OnMultasSelectedTipo, OnMultasGrupoSelected{
 
 	private int counterItemDownloads;
     private int lastPosition = 0;
@@ -593,11 +594,17 @@ private void setFragmentList(int position){
 	}
 	
 	
-	public void onMultaSelectedGrupo(int id) {
+	public void onMultaSelectedGrupo(int multa_id) {
 		
-		DB.open();
-		DB.multasPorGrupo(id);
-		DB.close();
+		Bundle args = new Bundle(); 
+		
+		args.putInt("multa_id", multa_id);
+		
+		MultasPorGrupo fragment = MultasPorGrupo.newInstance(args);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.content_frame, fragment, "TAG_FRAGMENT");
+	    ft.addToBackStack(null);
+	    ft.commit();
 	}
 	
 	
@@ -622,7 +629,23 @@ public void onMultaSelectedTipo(int id, String infraccion, String fundamento, in
 		
 	}
 	
+
+public void onMultaSelectedTipo(int multa_id) {
 	
+	Bundle args = new Bundle(); 
+	
+	args.putInt("multa_id", multa_id);
+	
+	MultasPorGrupo fragment = MultasPorGrupo.newInstance(args);
+	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+	ft.replace(R.id.content_frame, fragment, "TAG_FRAGMENT");
+    ft.addToBackStack(null);
+    ft.commit();
+	
+}
+
+
+
 	
 	public void dondePagar() {
 		
@@ -647,7 +670,27 @@ public void onMultaSelectedTipo(int id, String infraccion, String fundamento, in
 	}
 	
 	
-	
+	public void onMultaSelecGrupoItem(int id, String infraccion, String fundamento, int ran_ini, int ran_fin, Boolean frecuente, int num_multa)  {
+		
+
+		Bundle args = new Bundle(); 
+		
+		args.putInt("id", id);
+		args.putString("infraccion", infraccion);
+		args.putString("fundamento", fundamento);
+		args.putInt("ran_ini", ran_ini);
+		args.putInt("ran_fin", ran_fin);
+		args.putBoolean("frecuente", frecuente);
+		args.putInt("num_multa", (frecuente) ? num_multa : -1);
+		
+		DetalleMultaFragment mDetalleFragment =  DetalleMultaFragment.newInstance(args);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+        ft.replace(R.id.content_frame, mDetalleFragment, "TAG_FRAGMENT");
+        ft.addToBackStack(null);
+        ft.commit();
+		
+	}
 
 	
 	
