@@ -66,7 +66,9 @@ MultasPorTipoInter, OnMultasSelectedTipo, OnMultasGrupoSelected{
 
 	private int counterItemDownloads;
     private int lastPosition = 0;
-	
+	private boolean deseoConectar = false;
+	private static int conectarWiffi = 10;
+    
 	private DrawerLayout mDrawerLayout;
 	private LinearLayout mLayoutMenu;
 	private ListView mListViewMenu;
@@ -79,6 +81,8 @@ MultasPorTipoInter, OnMultasSelectedTipo, OnMultasGrupoSelected{
 	private AlertasDbAdapter DB;
 	
 	private static final String TAG_ASYN_CONECTOR ="TAG_ASYNC_MULTAS";
+	
+	private static final String TAG_MainActivity ="TAG_MainActivity";
 	
 
 	
@@ -339,28 +343,38 @@ private void setFragmentList(int position){
 	
 	public void MuestraMasFrecuentes() { //Debo utilizar este metodo para no hacer varias consultas a la base de datos y aprovechar los recursos al maximo
 		DB = new AlertasDbAdapter(this);
+	
+
 		ArrayList<Multa> mListaFrecuentes = new ArrayList<Multa>();
 		
 		try {
 			DB.open();
 			mListaFrecuentes = DB.buscaMultasFrecuentes(true);
 			DB.close();
-			
-			if (mListaFrecuentes.size() < 1) {
-	
-				if (estaConectado()) {
-					RecuperarTiposMulta();
-				}else {
-					showDialogInternet();
-				}
-			}
 		}catch(Exception e) {
-			
+			Log.e(TAG_MainActivity, "Error en la MainActivity, al intentar obtener las multas frecuentes: " + e.getMessage());
 		}
+		
+		
+		identificaConexion(mListaFrecuentes.size());
+		
+
+		
 		
 	}
 	
 	
+	
+	private void identificaConexion( int cantidad) {
+		if (cantidad < 1) {
+			
+			if (estaConectado()) {
+				RecuperarTiposMulta();
+			}else {
+				showDialogInternet();
+			}
+		}
+	}
 
 
 	
@@ -747,8 +761,8 @@ public void onMultaSelectedTipo(int multa_id) {
 									.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
 						                    public void onClick(DialogInterface dialog, int whichButton) {
 						    
-						                    	startActivityForResult(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
-						                    
+						                    	startActivityForResult(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), conectarWiffi);
+						                    	identificaConexion(0);
 						                    }
 						                })
 						             .setNegativeButton(R.string.alert_dialog_no, new DialogInterface.OnClickListener() {
@@ -759,6 +773,15 @@ public void onMultaSelectedTipo(int multa_id) {
 						              });
 									
 		builder.show();
+	}
+	
+	
+	protected void onActivityResult (int requestCodde, int resultCode, Intent data) {
+		
+		if(requestCodde == conectarWiffi && resultCode == RESULT_OK) {
+			data.
+		}
+		
 	}
 
 	
