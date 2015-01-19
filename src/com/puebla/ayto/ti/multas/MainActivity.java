@@ -3,10 +3,15 @@ package com.puebla.ayto.ti.multas;
 
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import navigationList.NavigationList;
+
+import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -42,7 +47,7 @@ import br.liveo.utils.Menus;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
+//import com.puebla.ayto.ti.multas.HttpRequest.HttpRequestException;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment;
 import com.puebla.ayto.ti.multas.fragments.DetalleMultaFragment.MuestraDetalleFragment;
 import com.puebla.ayto.ti.multas.fragments.DireccionesFragment;
@@ -433,14 +438,19 @@ private void setFragmentList(int position){
 	}
 	
 	  public void RecuperarTiposMulta(){
-	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/tipos/"); //Cambiar la url
+	    	String url = String.format("http://movil.pueblacapital.gob.mx/multas/tipos/"); //Cambiar la url
+	    	Log.d(TAG_ASYN_CONECTOR, url);
 	    	new AsyncSolicitaTiposDeMultas(this).execute(url);
 	    }
 	  
 	  public void RecuperarMulta(){
-	    	String url = String.format("http://movil-kiosko.pueblacapital.gob.mx/notificaciones/multas/todas/multas/"); //Cambiar la url
+	    	String url = String.format("http://movil.pueblacapital.gob.mx/multas/"); //Cambiar la url
 	    	new AsyncSolicitaMultas(this).execute(url);
 	    }
+	  
+	  
+	  
+	  
 	
     public class AsyncSolicitaTiposDeMultas extends AsyncTask<String, Long, String>  {
     	private Context mContext;
@@ -460,35 +470,41 @@ private void setFragmentList(int position){
     		super.onPreExecute();
     	}
     	
+
     	@Override
     	protected String doInBackground(String... urls) {
-
     		try {
-    			
-    			return HttpRequest.get(urls[0]).accept("application/json").body();
-    			
+    			return HttpRequest.get(urls[0]).accept("application/json").body();	
     		} catch (HttpRequestException exception) {
     			Log.e(TAG_ASYN_CONECTOR, exception.getMessage());
     			return null;
     		}
     	}
 
+
     	
     	@Override
     	protected void onPostExecute(String result) {
-    		
+
     		if (result != null){
-    			ArrayList<TiposDeMulta> mGetTiposMultas = getTiposDeMultas(result);
-    			//mostrarDatos(mGetMultas, tipo);
-	    		if(agregaTiposMultas(mGetTiposMultas)) { 
-	    			RecuperarMulta();
-	    		}
+    			
+    			if (result.substring(0, 1).equals("[") ) {
+    				ArrayList<TiposDeMulta> mGetTiposMultas = getTiposDeMultas(result);
+        			//mostrarDatos(mGetMultas, tipo);
+    	    		if(agregaTiposMultas(mGetTiposMultas)) { 
+    	    			RecuperarMulta();
+    	    		}
+        		}else {
+        			Toast.makeText(mContext, "Ocurrio un problema con el servidor", Toast.LENGTH_LONG).show();
+        		}
+    			
+    			
+    			
     		
+    		}else {
+    			Log.e(TAG_ASYN_CONECTOR, "Trajo un archivo nulo " + result);
     		}
-    		else
-    		{
-    			Toast.makeText(mContext, "No se obtuvieron datos de internet", Toast.LENGTH_SHORT).show();
-    		}
+    	
     		
     		
     		
@@ -521,7 +537,7 @@ private void setFragmentList(int position){
     		try {
     			return HttpRequest.get(urls[0]).accept("application/json").body();
     			
-    		} catch (HttpRequestException exception) {
+    		} catch (Exception e) {
     			return null;
     		}
     	}
@@ -779,7 +795,7 @@ public void onMultaSelectedTipo(int multa_id) {
 	protected void onActivityResult (int requestCodde, int resultCode, Intent data) {
 		
 		if(requestCodde == conectarWiffi && resultCode == RESULT_OK) {
-			data.
+			//data.
 		}
 		
 	}
